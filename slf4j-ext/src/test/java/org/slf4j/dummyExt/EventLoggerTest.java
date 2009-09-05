@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2004-2008 QOS.ch
  * All rights reserved.
- * 
+ *
  * Permission is hereby granted, free  of charge, to any person obtaining
  * a  copy  of this  software  and  associated  documentation files  (the
  * "Software"), to  deal in  the Software without  restriction, including
@@ -9,10 +9,10 @@
  * distribute,  sublicense, and/or sell  copies of  the Software,  and to
  * permit persons to whom the Software  is furnished to do so, subject to
  * the following conditions:
- * 
+ *
  * The  above  copyright  notice  and  this permission  notice  shall  be
  * included in all copies or substantial portions of the Software.
- * 
+ *
  * THE  SOFTWARE IS  PROVIDED  "AS  IS", WITHOUT  WARRANTY  OF ANY  KIND,
  * EXPRESS OR  IMPLIED, INCLUDING  BUT NOT LIMITED  TO THE  WARRANTIES OF
  * MERCHANTABILITY,    FITNESS    FOR    A   PARTICULAR    PURPOSE    AND
@@ -100,6 +100,32 @@ public class EventLoggerTest extends TestCase {
     for (int i=0; i < 2; ++i) {
       LoggingEvent event = listAppender.list.get(i);
       verify(event, data[i].toXML());
+      LocationInfo li = event.getLocationInformation();
+      assertEquals(this.getClass().getName(), li.getClassName());
+      assertEquals(event.getMDC("hostname"), "localhost");
+    }
+  }
+
+  public void testEventLogger2() {
+    EventData data[] = new EventData[2];
+    data[0] = new EventData();
+    data[0].setEventType("Login");
+    data[0].setEventId("1");
+    data[0].setEventDateTime(new Date());
+    data[0].put("Userid", "TestUser");
+    EventLogger.logEvent(data[0], null);
+
+    data[1] = new EventData();
+    data[1].setEventType("Update");
+    data[1].setEventId("2");
+    data[1].setEventDateTime(new Date());
+    data[1].put("FileName", "/etc/hosts");
+    EventLogger.logEvent(data[1], null);
+
+    assertEquals(2, listAppender.list.size());
+    for (int i=0; i < 2; ++i) {
+      LoggingEvent event = listAppender.list.get(i);
+      verify(event, data[i].asString(null));
       LocationInfo li = event.getLocationInformation();
       assertEquals(this.getClass().getName(), li.getClassName());
       assertEquals(event.getMDC("hostname"), "localhost");

@@ -38,21 +38,23 @@ import java.util.logging.LogRecord;
 
 import org.slf4j.Logger;
 import org.slf4j.Marker;
+import org.slf4j.StructuredData;
 import org.slf4j.helpers.MarkerIgnoringBase;
 import org.slf4j.helpers.MessageFormatter;
 import org.slf4j.spi.LocationAwareLogger;
+import org.slf4j.spi.XLocationAwareLogger;
 
 /**
  * A wrapper over {@link java.util.logging.Logger java.util.logging.Logger} in
  * conformity with the {@link Logger} interface. Note that the logging levels
  * mentioned in this class refer to those defined in the java.util.logging
  * package.
- * 
+ *
  * @author Ceki G&uuml;lc&uuml;
  * @author Peter Royal
  */
 public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements
-    LocationAwareLogger {
+    XLocationAwareLogger {
 
   private static final long serialVersionUID = -8053026990503422791L;
 
@@ -67,7 +69,7 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements
 
   /**
    * Is this logger instance enabled for the FINEST level?
-   * 
+   *
    * @return True if this Logger is enabled for level FINEST, false otherwise.
    */
   public boolean isTraceEnabled() {
@@ -76,7 +78,7 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements
 
   /**
    * Log a message object at level FINEST.
-   * 
+   *
    * @param msg -
    *          the message object to be logged
    */
@@ -89,12 +91,12 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements
   /**
    * Log a message at level FINEST according to the specified format and
    * argument.
-   * 
+   *
    * <p>
    * This form avoids superfluous object creation when the logger is disabled
    * for level FINEST.
    * </p>
-   * 
+   *
    * @param format
    *          the format string
    * @param arg
@@ -110,12 +112,12 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements
   /**
    * Log a message at level FINEST according to the specified format and
    * arguments.
-   * 
+   *
    * <p>
    * This form avoids superfluous object creation when the logger is disabled
    * for the FINEST level.
    * </p>
-   * 
+   *
    * @param format
    *          the format string
    * @param arg1
@@ -133,12 +135,12 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements
   /**
    * Log a message at level FINEST according to the specified format and
    * arguments.
-   * 
+   *
    * <p>
    * This form avoids superfluous object creation when the logger is disabled
    * for the FINEST level.
    * </p>
-   * 
+   *
    * @param format
    *          the format string
    * @param argArray
@@ -153,7 +155,7 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements
 
   /**
    * Log an exception (throwable) at level FINEST with an accompanying message.
-   * 
+   *
    * @param msg
    *          the message accompanying the exception
    * @param t
@@ -167,7 +169,7 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements
 
   /**
    * Is this logger instance enabled for the FINE level?
-   * 
+   *
    * @return True if this Logger is enabled for level FINE, false otherwise.
    */
   public boolean isDebugEnabled() {
@@ -176,7 +178,7 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements
 
   /**
    * Log a message object at level FINE.
-   * 
+   *
    * @param msg -
    *          the message object to be logged
    */
@@ -188,12 +190,12 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements
 
   /**
    * Log a message at level FINE according to the specified format and argument.
-   * 
+   *
    * <p>
    * This form avoids superfluous object creation when the logger is disabled
    * for level FINE.
    * </p>
-   * 
+   *
    * @param format
    *          the format string
    * @param arg
@@ -209,12 +211,12 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements
   /**
    * Log a message at level FINE according to the specified format and
    * arguments.
-   * 
+   *
    * <p>
    * This form avoids superfluous object creation when the logger is disabled
    * for the FINE level.
    * </p>
-   * 
+   *
    * @param format
    *          the format string
    * @param arg1
@@ -232,12 +234,12 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements
   /**
    * Log a message at level FINE according to the specified format and
    * arguments.
-   * 
+   *
    * <p>
    * This form avoids superfluous object creation when the logger is disabled
    * for the FINE level.
    * </p>
-   * 
+   *
    * @param format
    *          the format string
    * @param argArray
@@ -252,7 +254,7 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements
 
   /**
    * Log an exception (throwable) at level FINE with an accompanying message.
-   * 
+   *
    * @param msg
    *          the message accompanying the exception
    * @param t
@@ -266,7 +268,7 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements
 
   /**
    * Is this logger instance enabled for the INFO level?
-   * 
+   *
    * @return True if this Logger is enabled for the INFO level, false otherwise.
    */
   public boolean isInfoEnabled() {
@@ -275,7 +277,7 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements
 
   /**
    * Log a message object at the INFO level.
-   * 
+   *
    * @param msg -
    *          the message object to be logged
    */
@@ -287,12 +289,12 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements
 
   /**
    * Log a message at level INFO according to the specified format and argument.
-   * 
+   *
    * <p>
    * This form avoids superfluous object creation when the logger is disabled
    * for the INFO level.
    * </p>
-   * 
+   *
    * @param format
    *          the format string
    * @param arg
@@ -308,12 +310,12 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements
   /**
    * Log a message at the INFO level according to the specified format and
    * arguments.
-   * 
+   *
    * <p>
    * This form avoids superfluous object creation when the logger is disabled
    * for the INFO level.
    * </p>
-   * 
+   *
    * @param format
    *          the format string
    * @param arg1
@@ -331,12 +333,12 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements
   /**
    * Log a message at level INFO according to the specified format and
    * arguments.
-   * 
+   *
    * <p>
    * This form avoids superfluous object creation when the logger is disabled
    * for the INFO level.
    * </p>
-   * 
+   *
    * @param format
    *          the format string
    * @param argArray
@@ -352,7 +354,7 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements
   /**
    * Log an exception (throwable) at the INFO level with an accompanying
    * message.
-   * 
+   *
    * @param msg
    *          the message accompanying the exception
    * @param t
@@ -366,7 +368,7 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements
 
   /**
    * Is this logger instance enabled for the WARNING level?
-   * 
+   *
    * @return True if this Logger is enabled for the WARNING level, false
    *         otherwise.
    */
@@ -376,7 +378,7 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements
 
   /**
    * Log a message object at the WARNING level.
-   * 
+   *
    * @param msg -
    *          the message object to be logged
    */
@@ -389,12 +391,12 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements
   /**
    * Log a message at the WARNING level according to the specified format and
    * argument.
-   * 
+   *
    * <p>
    * This form avoids superfluous object creation when the logger is disabled
    * for the WARNING level.
    * </p>
-   * 
+   *
    * @param format
    *          the format string
    * @param arg
@@ -410,12 +412,12 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements
   /**
    * Log a message at the WARNING level according to the specified format and
    * arguments.
-   * 
+   *
    * <p>
    * This form avoids superfluous object creation when the logger is disabled
    * for the WARNING level.
    * </p>
-   * 
+   *
    * @param format
    *          the format string
    * @param arg1
@@ -433,12 +435,12 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements
   /**
    * Log a message at level WARNING according to the specified format and
    * arguments.
-   * 
+   *
    * <p>
    * This form avoids superfluous object creation when the logger is disabled
    * for the WARNING level.
    * </p>
-   * 
+   *
    * @param format
    *          the format string
    * @param argArray
@@ -454,7 +456,7 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements
   /**
    * Log an exception (throwable) at the WARNING level with an accompanying
    * message.
-   * 
+   *
    * @param msg
    *          the message accompanying the exception
    * @param t
@@ -468,7 +470,7 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements
 
   /**
    * Is this logger instance enabled for level SEVERE?
-   * 
+   *
    * @return True if this Logger is enabled for level SEVERE, false otherwise.
    */
   public boolean isErrorEnabled() {
@@ -477,7 +479,7 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements
 
   /**
    * Log a message object at the SEVERE level.
-   * 
+   *
    * @param msg -
    *          the message object to be logged
    */
@@ -490,12 +492,12 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements
   /**
    * Log a message at the SEVERE level according to the specified format and
    * argument.
-   * 
+   *
    * <p>
    * This form avoids superfluous object creation when the logger is disabled
    * for the SEVERE level.
    * </p>
-   * 
+   *
    * @param format
    *          the format string
    * @param arg
@@ -511,12 +513,12 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements
   /**
    * Log a message at the SEVERE level according to the specified format and
    * arguments.
-   * 
+   *
    * <p>
    * This form avoids superfluous object creation when the logger is disabled
    * for the SEVERE level.
    * </p>
-   * 
+   *
    * @param format
    *          the format string
    * @param arg1
@@ -534,12 +536,12 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements
   /**
    * Log a message at level SEVERE according to the specified format and
    * arguments.
-   * 
+   *
    * <p>
    * This form avoids superfluous object creation when the logger is disabled
    * for the SEVERE level.
    * </p>
-   * 
+   *
    * @param format
    *          the format string
    * @param argArray
@@ -555,7 +557,7 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements
   /**
    * Log an exception (throwable) at the SEVERE level with an accompanying
    * message.
-   * 
+   *
    * @param msg
    *          the message accompanying the exception
    * @param t
@@ -571,9 +573,9 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements
    * Log the message at the specified level with the specified throwable if any.
    * This method creates a LogRecord and fills in caller date before calling
    * this instance's JDK14 logger.
-   * 
+   *
    * See bug report #13 for more details.
-   * 
+   *
    * @param level
    * @param msg
    * @param t
@@ -593,7 +595,7 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements
 
   /**
    * Fill in caller data if possible.
-   * 
+   *
    * @param record
    *          The record to update
    */
@@ -626,9 +628,48 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements
       record.setSourceMethodName(ste.getMethodName());
     }
   }
- 
+
   public void log(Marker marker, String callerFQCN, int level, String message,
       Throwable t) {
+    Level julLevel = getLevel(level);
+    // the logger.isLoggable check avoids the unconditional
+    // construction of location data for disabled log
+    // statements. As of 2008-07-31, callers of this method
+    // do not perform this check. See also
+    // http://bugzilla.slf4j.org/show_bug.cgi?id=90
+    if(logger.isLoggable(julLevel)) {
+      log(callerFQCN, julLevel, message, t);
+    }
+  }
+
+
+  public void log(Marker marker, String callerFQCN, int level, String format, Object[] argArray, Throwable t) {
+     Level julLevel = getLevel(level);
+    // the logger.isLoggable check avoids the unconditional
+    // construction of location data for disabled log
+    // statements. As of 2008-07-31, callers of this method
+    // do not perform this check. See also
+    // http://bugzilla.slf4j.org/show_bug.cgi?id=90
+    if(logger.isLoggable(julLevel)) {
+      String msgStr = MessageFormatter.arrayFormat(format, argArray);
+      log(callerFQCN, julLevel, msgStr, t);
+    }
+  }
+
+  public void log(Marker marker, String callerFQCN, int level, StructuredData data, String format,
+                  Object[] argArray, Throwable t) {
+    Level julLevel = getLevel(level);
+    // the logger.isLoggable check avoids the unconditional
+    // construction of location data for disabled log
+    // statements. As of 2008-07-31, callers of this method
+    // do not perform this check. See also
+    // http://bugzilla.slf4j.org/show_bug.cgi?id=90
+    if(logger.isLoggable(julLevel)) {
+      log(callerFQCN, julLevel, data.asString(format), t);
+    }
+  }
+
+  private Level getLevel(int level) {
     Level julLevel;
     switch (level) {
     case LocationAwareLogger.TRACE_INT:
@@ -647,16 +688,8 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements
       julLevel = Level.SEVERE;
       break;
     default:
-      throw new IllegalStateException("Level number " + level
-          + " is not recognized.");
+      throw new IllegalStateException("Level number " + level + " is not recognized.");
     }
-    // the logger.isLoggable check avoids the unconditional 
-    // construction of location data for disabled log
-    // statements. As of 2008-07-31, callers of this method 
-    // do not perform this check. See also 
-    // http://bugzilla.slf4j.org/show_bug.cgi?id=90
-    if(logger.isLoggable(julLevel)) {
-      log(callerFQCN, julLevel, message, t);
-    }
+    return julLevel;
   }
 }

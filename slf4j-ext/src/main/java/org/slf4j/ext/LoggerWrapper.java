@@ -4,39 +4,49 @@ import org.slf4j.Logger;
 import org.slf4j.Marker;
 import org.slf4j.helpers.MessageFormatter;
 import org.slf4j.spi.LocationAwareLogger;
+import org.slf4j.spi.XLocationAwareLogger;
 
 /**
  * A helper class wrapping an {@link org.slf4j.Logger}
  * instance preserving location information if the wrapped
  * instance supports it.
- * 
+ *
  * @author Ralph Goers
  * @author Ceki G&uuml;lc&uuml;
  */
 public class LoggerWrapper implements Logger {
 
   // To ensure consistency between two instances sharing the same name (homonyms)
-  // a LoggerWrapper should not contain any state beyond 
+  // a LoggerWrapper should not contain any state beyond
   // the Logger instance it wraps.
   // Note that 'instanceofLAL' directly depends on Logger.
   // fqcn depend on the caller, but its value would not be different
   // between successive invocations of a factory class
-  
+
   protected final Logger logger;
   final String fqcn;
   // is this logger instance a LocationAwareLogger
   protected final boolean instanceofLAL;
-  
+
+  // is this logger instance an XLocationAwareLogger
+  protected final boolean instanceofXLAL;
+
   public LoggerWrapper(Logger logger, String fqcn) {
     this.logger = logger;
     this.fqcn = fqcn;
     if (logger instanceof LocationAwareLogger) {
       instanceofLAL = true;
+      if (logger instanceof XLocationAwareLogger) {
+        instanceofXLAL = true;
+      } else {
+        instanceofXLAL = false;
+      }
     } else {
       instanceofLAL = false;
+      instanceofXLAL = false;
     }
   }
-  
+
   /**
    * Delegate to the appropriate method of the underlying logger.
    */

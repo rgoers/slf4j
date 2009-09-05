@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2004-2008 QOS.ch
  * All rights reserved.
- * 
+ *
  * Permission is hereby granted, free  of charge, to any person obtaining
  * a  copy  of this  software  and  associated  documentation files  (the
  * "Software"), to  deal in  the Software without  restriction, including
@@ -9,10 +9,10 @@
  * distribute,  sublicense, and/or sell  copies of  the Software,  and to
  * permit persons to whom the Software  is furnished to do so, subject to
  * the following conditions:
- * 
+ *
  * The  above  copyright  notice  and  this permission  notice  shall  be
  * included in all copies or substantial portions of the Software.
- * 
+ *
  * THE  SOFTWARE IS  PROVIDED  "AS  IS", WITHOUT  WARRANTY  OF ANY  KIND,
  * EXPRESS OR  IMPLIED, INCLUDING  BUT NOT LIMITED  TO THE  WARRANTIES OF
  * MERCHANTABILITY,    FITNESS    FOR    A   PARTICULAR    PURPOSE    AND
@@ -30,28 +30,30 @@ import java.io.Serializable;
 import org.apache.log4j.Level;
 import org.slf4j.Logger;
 import org.slf4j.Marker;
+import org.slf4j.StructuredData;
 import org.slf4j.helpers.MarkerIgnoringBase;
 import org.slf4j.helpers.MessageFormatter;
 import org.slf4j.spi.LocationAwareLogger;
+import org.slf4j.spi.XLocationAwareLogger;
 
 /**
  * A wrapper over {@link org.apache.log4j.Logger org.apache.log4j.Logger} in
- * conforming to the {@link Logger} interface. 
- * 
+ * conforming to the {@link Logger} interface.
+ *
  * <p>Note that the logging levels mentioned in this class refer to those defined in the <a
  * href="http://logging.apache.org/log4j/docs/api/org/apache/log4j/Level.html"><code>org.apache.log4j.Level</code></a>
  * class.
- * 
+ *
  * <p>
  * The TRACE level was introduced in log4j version 1.2.12. In order to avoid
  * crashing the host application, in the case the log4j version in use predates
  * 1.2.12, the TRACE level will be mapped as DEBUG. See also <a
  * href="http://bugzilla.slf4j.org/show_bug.cgi?id=68">bug 68</a>.
- * 
+ *
  * @author Ceki G&uuml;lc&uuml;
  */
 public final class Log4jLoggerAdapter extends MarkerIgnoringBase implements
-    LocationAwareLogger, Serializable {
+    XLocationAwareLogger, Serializable {
 
   private static final long serialVersionUID = 6182834493563598289L;
 
@@ -87,7 +89,7 @@ public final class Log4jLoggerAdapter extends MarkerIgnoringBase implements
 
   /**
    * Is this logger instance enabled for the TRACE level?
-   * 
+   *
    * @return True if this Logger is enabled for level TRACE, false otherwise.
    */
   public boolean isTraceEnabled() {
@@ -100,7 +102,7 @@ public final class Log4jLoggerAdapter extends MarkerIgnoringBase implements
 
   /**
    * Log a message object at level TRACE.
-   * 
+   *
    * @param msg -
    *                the message object to be logged
    */
@@ -111,12 +113,12 @@ public final class Log4jLoggerAdapter extends MarkerIgnoringBase implements
   /**
    * Log a message at level TRACE according to the specified format and
    * argument.
-   * 
+   *
    * <p>
    * This form avoids superfluous object creation when the logger is disabled
    * for level TRACE.
    * </p>
-   * 
+   *
    * @param format
    *                the format string
    * @param arg
@@ -132,12 +134,12 @@ public final class Log4jLoggerAdapter extends MarkerIgnoringBase implements
   /**
    * Log a message at level TRACE according to the specified format and
    * arguments.
-   * 
+   *
    * <p>
    * This form avoids superfluous object creation when the logger is disabled
    * for the TRACE level.
    * </p>
-   * 
+   *
    * @param format
    *                the format string
    * @param arg1
@@ -155,12 +157,12 @@ public final class Log4jLoggerAdapter extends MarkerIgnoringBase implements
   /**
    * Log a message at level TRACE according to the specified format and
    * arguments.
-   * 
+   *
    * <p>
    * This form avoids superfluous object creation when the logger is disabled
    * for the TRACE level.
    * </p>
-   * 
+   *
    * @param format
    *                the format string
    * @param argArray
@@ -175,7 +177,7 @@ public final class Log4jLoggerAdapter extends MarkerIgnoringBase implements
 
   /**
    * Log an exception (throwable) at level TRACE with an accompanying message.
-   * 
+   *
    * @param msg
    *                the message accompanying the exception
    * @param t
@@ -187,7 +189,7 @@ public final class Log4jLoggerAdapter extends MarkerIgnoringBase implements
 
   /**
    * Is this logger instance enabled for the DEBUG level?
-   * 
+   *
    * @return True if this Logger is enabled for level DEBUG, false otherwise.
    */
   public boolean isDebugEnabled() {
@@ -196,7 +198,7 @@ public final class Log4jLoggerAdapter extends MarkerIgnoringBase implements
 
   /**
    * Log a message object at level DEBUG.
-   * 
+   *
    * @param msg -
    *                the message object to be logged
    */
@@ -207,12 +209,12 @@ public final class Log4jLoggerAdapter extends MarkerIgnoringBase implements
   /**
    * Log a message at level DEBUG according to the specified format and
    * argument.
-   * 
+   *
    * <p>
    * This form avoids superfluous object creation when the logger is disabled
    * for level DEBUG.
    * </p>
-   * 
+   *
    * @param format
    *                the format string
    * @param arg
@@ -228,12 +230,12 @@ public final class Log4jLoggerAdapter extends MarkerIgnoringBase implements
   /**
    * Log a message at level DEBUG according to the specified format and
    * arguments.
-   * 
+   *
    * <p>
    * This form avoids superfluous object creation when the logger is disabled
    * for the DEBUG level.
    * </p>
-   * 
+   *
    * @param format
    *                the format string
    * @param arg1
@@ -251,12 +253,12 @@ public final class Log4jLoggerAdapter extends MarkerIgnoringBase implements
   /**
    * Log a message at level DEBUG according to the specified format and
    * arguments.
-   * 
+   *
    * <p>
    * This form avoids superfluous object creation when the logger is disabled
    * for the DEBUG level.
    * </p>
-   * 
+   *
    * @param format
    *                the format string
    * @param argArray
@@ -271,7 +273,7 @@ public final class Log4jLoggerAdapter extends MarkerIgnoringBase implements
 
   /**
    * Log an exception (throwable) at level DEBUG with an accompanying message.
-   * 
+   *
    * @param msg
    *                the message accompanying the exception
    * @param t
@@ -283,7 +285,7 @@ public final class Log4jLoggerAdapter extends MarkerIgnoringBase implements
 
   /**
    * Is this logger instance enabled for the INFO level?
-   * 
+   *
    * @return True if this Logger is enabled for the INFO level, false otherwise.
    */
   public boolean isInfoEnabled() {
@@ -292,7 +294,7 @@ public final class Log4jLoggerAdapter extends MarkerIgnoringBase implements
 
   /**
    * Log a message object at the INFO level.
-   * 
+   *
    * @param msg -
    *                the message object to be logged
    */
@@ -302,12 +304,12 @@ public final class Log4jLoggerAdapter extends MarkerIgnoringBase implements
 
   /**
    * Log a message at level INFO according to the specified format and argument.
-   * 
+   *
    * <p>
    * This form avoids superfluous object creation when the logger is disabled
    * for the INFO level.
    * </p>
-   * 
+   *
    * @param format
    *                the format string
    * @param arg
@@ -323,12 +325,12 @@ public final class Log4jLoggerAdapter extends MarkerIgnoringBase implements
   /**
    * Log a message at the INFO level according to the specified format and
    * arguments.
-   * 
+   *
    * <p>
    * This form avoids superfluous object creation when the logger is disabled
    * for the INFO level.
    * </p>
-   * 
+   *
    * @param format
    *                the format string
    * @param arg1
@@ -346,12 +348,12 @@ public final class Log4jLoggerAdapter extends MarkerIgnoringBase implements
   /**
    * Log a message at level INFO according to the specified format and
    * arguments.
-   * 
+   *
    * <p>
    * This form avoids superfluous object creation when the logger is disabled
    * for the INFO level.
    * </p>
-   * 
+   *
    * @param format
    *                the format string
    * @param argArray
@@ -367,7 +369,7 @@ public final class Log4jLoggerAdapter extends MarkerIgnoringBase implements
   /**
    * Log an exception (throwable) at the INFO level with an accompanying
    * message.
-   * 
+   *
    * @param msg
    *                the message accompanying the exception
    * @param t
@@ -379,7 +381,7 @@ public final class Log4jLoggerAdapter extends MarkerIgnoringBase implements
 
   /**
    * Is this logger instance enabled for the WARN level?
-   * 
+   *
    * @return True if this Logger is enabled for the WARN level, false otherwise.
    */
   public boolean isWarnEnabled() {
@@ -388,7 +390,7 @@ public final class Log4jLoggerAdapter extends MarkerIgnoringBase implements
 
   /**
    * Log a message object at the WARN level.
-   * 
+   *
    * @param msg -
    *                the message object to be logged
    */
@@ -399,12 +401,12 @@ public final class Log4jLoggerAdapter extends MarkerIgnoringBase implements
   /**
    * Log a message at the WARN level according to the specified format and
    * argument.
-   * 
+   *
    * <p>
    * This form avoids superfluous object creation when the logger is disabled
    * for the WARN level.
    * </p>
-   * 
+   *
    * @param format
    *                the format string
    * @param arg
@@ -420,12 +422,12 @@ public final class Log4jLoggerAdapter extends MarkerIgnoringBase implements
   /**
    * Log a message at the WARN level according to the specified format and
    * arguments.
-   * 
+   *
    * <p>
    * This form avoids superfluous object creation when the logger is disabled
    * for the WARN level.
    * </p>
-   * 
+   *
    * @param format
    *                the format string
    * @param arg1
@@ -443,12 +445,12 @@ public final class Log4jLoggerAdapter extends MarkerIgnoringBase implements
   /**
    * Log a message at level WARN according to the specified format and
    * arguments.
-   * 
+   *
    * <p>
    * This form avoids superfluous object creation when the logger is disabled
    * for the WARN level.
    * </p>
-   * 
+   *
    * @param format
    *                the format string
    * @param argArray
@@ -464,7 +466,7 @@ public final class Log4jLoggerAdapter extends MarkerIgnoringBase implements
   /**
    * Log an exception (throwable) at the WARN level with an accompanying
    * message.
-   * 
+   *
    * @param msg
    *                the message accompanying the exception
    * @param t
@@ -476,7 +478,7 @@ public final class Log4jLoggerAdapter extends MarkerIgnoringBase implements
 
   /**
    * Is this logger instance enabled for level ERROR?
-   * 
+   *
    * @return True if this Logger is enabled for level ERROR, false otherwise.
    */
   public boolean isErrorEnabled() {
@@ -485,7 +487,7 @@ public final class Log4jLoggerAdapter extends MarkerIgnoringBase implements
 
   /**
    * Log a message object at the ERROR level.
-   * 
+   *
    * @param msg -
    *                the message object to be logged
    */
@@ -496,12 +498,12 @@ public final class Log4jLoggerAdapter extends MarkerIgnoringBase implements
   /**
    * Log a message at the ERROR level according to the specified format and
    * argument.
-   * 
+   *
    * <p>
    * This form avoids superfluous object creation when the logger is disabled
    * for the ERROR level.
    * </p>
-   * 
+   *
    * @param format
    *                the format string
    * @param arg
@@ -517,12 +519,12 @@ public final class Log4jLoggerAdapter extends MarkerIgnoringBase implements
   /**
    * Log a message at the ERROR level according to the specified format and
    * arguments.
-   * 
+   *
    * <p>
    * This form avoids superfluous object creation when the logger is disabled
    * for the ERROR level.
    * </p>
-   * 
+   *
    * @param format
    *                the format string
    * @param arg1
@@ -540,12 +542,12 @@ public final class Log4jLoggerAdapter extends MarkerIgnoringBase implements
   /**
    * Log a message at level ERROR according to the specified format and
    * arguments.
-   * 
+   *
    * <p>
    * This form avoids superfluous object creation when the logger is disabled
    * for the ERROR level.
    * </p>
-   * 
+   *
    * @param format
    *                the format string
    * @param argArray
@@ -561,7 +563,7 @@ public final class Log4jLoggerAdapter extends MarkerIgnoringBase implements
   /**
    * Log an exception (throwable) at the ERROR level with an accompanying
    * message.
-   * 
+   *
    * @param msg
    *                the message accompanying the exception
    * @param t
@@ -573,6 +575,38 @@ public final class Log4jLoggerAdapter extends MarkerIgnoringBase implements
 
   public void log(Marker marker, String callerFQCN, int level, String msg,
       Throwable t) {
+    logger.log(callerFQCN, getLog4jLevel(level), msg, t);
+  }
+
+  /**
+   *
+   * @param marker
+   * @param callerFQCN The fully qualified class name of the <b>caller</b>
+   * @param level
+   * @param format
+   * @param argArray
+   * @param t
+   */
+  public void log(Marker marker, String callerFQCN, int level, String format, Object[] argArray, Throwable t) {
+    String msgStr = MessageFormatter.arrayFormat(format, argArray);
+    logger.log(callerFQCN, getLog4jLevel(level), msgStr, t);
+  }
+
+  /**
+   *
+   * @param marker
+   * @param callerFQCN The fully qualified class name of the <b>caller</b>
+   * @param level
+   * @param data
+   * @param argArray
+   * @param t
+   */
+  public void log(Marker marker, String callerFQCN, int level, StructuredData data, String format,
+                  Object[] argArray, Throwable t) {
+    logger.log(callerFQCN, getLog4jLevel(level), data.asString(format), t);
+  }
+
+  private Level getLog4jLevel(int level) {
     Level log4jLevel;
     switch (level) {
     case LocationAwareLogger.TRACE_INT:
@@ -591,10 +625,8 @@ public final class Log4jLoggerAdapter extends MarkerIgnoringBase implements
       log4jLevel = Level.ERROR;
       break;
     default:
-      throw new IllegalStateException("Level number " + level
-          + " is not recognized.");
+      throw new IllegalStateException("Level number " + level + " is not recognized.");
     }
-    logger.log(callerFQCN, log4jLevel, msg, t);
+    return log4jLevel;
   }
-
 }
