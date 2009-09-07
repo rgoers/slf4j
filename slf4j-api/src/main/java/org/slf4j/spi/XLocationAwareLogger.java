@@ -26,7 +26,6 @@ package org.slf4j.spi;
 
 import org.slf4j.Marker;
 import org.slf4j.StructuredData;
-import org.slf4j.spi.LocationAwareLogger;
 
 /**
  * An <b>optional</b> interface helping integration with logging systems capable of
@@ -59,10 +58,8 @@ public interface XLocationAwareLogger extends LocationAwareLogger {
    * @param level The logging level
    * @param data The StructuredData.
    * @param format The format style or null to use the default.
-   * @param argArray Any parameters or null.
    * @param t A Throwable or null.
    */
-  public void log(Marker marker, String fqcn, int level, StructuredData data, String format,
-                  Object[] argArray, Throwable t);
+  public void log(Marker marker, String fqcn, int level, StructuredData data, String format, Throwable t);
 
 }

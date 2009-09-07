@@ -33,8 +33,6 @@ import java.util.Collection;
 import java.util.AbstractSet;
 import java.util.AbstractCollection;
 import java.util.HashMap;
-import java.util.regex.Pattern;
-import java.util.regex.Matcher;
 import java.beans.XMLDecoder;
 import java.beans.XMLEncoder;
 import java.beans.ExceptionListener;
@@ -53,7 +51,6 @@ public class EventData extends StructuredDataImpl implements Serializable {
   public static final String EVENT_TYPE = "EventType";
   public static final String EVENT_DATETIME = "EventDateTime";
   public static final String EVENT_ID = "EventId";
-  private static final Pattern PATTERN = Pattern.compile("\\[([^ ]+) [([\\w.-]*)=\"([\\w.-]*)\"]*\\][ ([.]+)]?");
   private EventMap eventData = new EventMap(getData());
 
   /**
@@ -192,7 +189,7 @@ public class EventData extends StructuredDataImpl implements Serializable {
    *          The type of the event.
    */
   public void setEventType(String eventType) {
-    getData().put(EVENT_TYPE, eventType);
+    setType(eventType);
   }
 
   /**
@@ -201,7 +198,7 @@ public class EventData extends StructuredDataImpl implements Serializable {
    * @return The event type.
    */
   public String getEventType() {
-    return (String) getData().get(EVENT_TYPE);
+    return getType();
   }
 
   /**
@@ -285,7 +282,7 @@ public class EventData extends StructuredDataImpl implements Serializable {
   /**
    * Format the EventData for printing.
    * @param format The format identifier. This implementation supports "XML".
-   * @return
+   * @return The formatted EventData.
    */
   @Override
   public String asString(String format) {
@@ -346,6 +343,8 @@ public class EventData extends StructuredDataImpl implements Serializable {
         return getId();
       } else if (EVENT_MESSAGE.equals(key)) {
         return getMessage();
+      } else if (EVENT_TYPE.equals(key)) {
+        return getType();
       }
       return parent.get(key);
     }
@@ -355,6 +354,8 @@ public class EventData extends StructuredDataImpl implements Serializable {
         return getId() == null;
       } else if (EVENT_MESSAGE.equals(key)) {
         return getMessage() == null;
+      } else if (EVENT_TYPE.equals(key)) {
+        return getType() == null;
       }
       return parent.containsKey(key);
     }
@@ -365,6 +366,8 @@ public class EventData extends StructuredDataImpl implements Serializable {
         setId(newValue.toString());
       } else if (EVENT_MESSAGE.equals(key)) {
         setMessage(newValue.toString());
+      } else if (EVENT_TYPE.equals(key)) {
+        setType(newValue.toString());
       } else {
         parent.put(key, newValue);
       }
@@ -380,9 +383,11 @@ public class EventData extends StructuredDataImpl implements Serializable {
     public Object remove(Object key) {
       Object oldValue = get(key);
       if (EVENT_ID.equals(key)) {
-        // Don't allow id to be removed.
+        setId(null);
       } else if (EVENT_MESSAGE.equals(key)) {
         setMessage(null);
+      } else if (EVENT_TYPE.equals(key)) {
+        setType(null);
       } else {
         parent.remove(key);
       }
@@ -432,6 +437,8 @@ public class EventData extends StructuredDataImpl implements Serializable {
           setEventId(newValue.toString());
         } else if (key.equals(EVENT_MESSAGE)) {
           setMessage(newValue.toString());
+        } else if (key.equals(EVENT_TYPE)) {
+          setType(newValue.toString());
         }
         value = newValue;
         return oldValue;
@@ -442,12 +449,14 @@ public class EventData extends StructuredDataImpl implements Serializable {
       protected Iterator<Map.Entry<String, Object>> iterator;
       protected boolean iterId;
       protected boolean iterMessage;
+      protected boolean iterType;
       private Map.Entry<String, Object> current = null;
 
       public EventIterator() {
         iterator = getData().entrySet().iterator();
-        iterId = true;
+        iterId = getId() != null;
         iterMessage = getMessage() != null;
+        iterType = getType() != null;
       }
 
       public Map.Entry<String, Object> nextEntry() {
@@ -457,6 +466,9 @@ public class EventData extends StructuredDataImpl implements Serializable {
         } else if (iterMessage) {
           iterMessage = false;
           current = new Entry(EVENT_MESSAGE, getMessage());
+        } else if (iterType) {
+          iterType = false;
+          current = new Entry(EVENT_TYPE, getType());
         } else {
           current = iterator.next();
         }
@@ -464,7 +476,7 @@ public class EventData extends StructuredDataImpl implements Serializable {
       }
 
       public boolean hasNext() {
-        return iterator.hasNext() || iterId || iterMessage;
+        return iterator.hasNext() || iterId || iterMessage || iterType;
       }
 
       public void remove() {

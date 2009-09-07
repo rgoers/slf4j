@@ -113,19 +113,19 @@ public class EventLoggerTest extends TestCase {
     data[0].setEventId("1");
     data[0].setEventDateTime(new Date());
     data[0].put("Userid", "TestUser");
-    EventLogger.logEvent(data[0], null);
+    EventLogger.logEvent(data[0], "full");
 
     data[1] = new EventData();
     data[1].setEventType("Update");
     data[1].setEventId("2");
     data[1].setEventDateTime(new Date());
     data[1].put("FileName", "/etc/hosts");
-    EventLogger.logEvent(data[1], null);
+    EventLogger.logEvent(data[1], "full");
 
     assertEquals(2, listAppender.list.size());
     for (int i=0; i < 2; ++i) {
       LoggingEvent event = listAppender.list.get(i);
-      verify(event, data[i].asString(null));
+      verify(event, data[i].asString());
       LocationInfo li = event.getLocationInformation();
       assertEquals(this.getClass().getName(), li.getClassName());
       assertEquals(event.getMDC("hostname"), "localhost");

@@ -33,7 +33,14 @@ import java.util.Map;
 public interface StructuredData
 {
   /**
-   * Returns the key that identifies the type of structured data.
+   * Returns the type of data. This corresponds to the MSGID in RFC 5424.
+   * @return The message type.
+   */
+  String getType();
+
+  /**
+   * Returns the identifier of structured data. This corresponds to the SD-ID
+   * in RFC 5424.
    * @return The structured data id.
    */
   String getId();
@@ -54,6 +61,12 @@ public interface StructuredData
   Map getData();
 
   /**
+   * Formats the structured data in the form [id key="value" ...] message as described in RFC 5424.
+   * @return The formatted String.
+   */
+  String asString();
+
+  /**
    * Formats the structured data in the specified format. If the format is null or is something
    * the implementation does not support then the String will be
    * in the form [id key="value" ...] message as described in RFC 5424.
@@ -61,4 +74,15 @@ public interface StructuredData
    * @return The formatted String.
    */
   String asString(String format);
+
+  /**
+   * Formats the structured data as described in RFC5424 including the data in the additional maps
+   * if any are present.
+   * @param format The format identifier.
+   * @param structuredDataId The default SD-ID as described in RFC 5424. This value will be used if
+   * not id is present in the StructuredData.
+   * @param maps Additional data to include.
+   * @return The formatted String.
+   */
+  String asString(String format, String structuredDataId, Map[] maps);
 }

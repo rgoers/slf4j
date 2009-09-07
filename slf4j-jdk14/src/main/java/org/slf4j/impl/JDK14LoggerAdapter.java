@@ -656,8 +656,7 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements
     }
   }
 
-  public void log(Marker marker, String callerFQCN, int level, StructuredData data, String format,
-                  Object[] argArray, Throwable t) {
+  public void log(Marker marker, String callerFQCN, int level, StructuredData data, String format, Throwable t) {
     Level julLevel = getLevel(level);
     // the logger.isLoggable check avoids the unconditional
     // construction of location data for disabled log

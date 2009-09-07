@@ -9,8 +9,8 @@ import java.util.Iterator;
 /**
  *
  */
-public class StructuredDataImpl implements StructuredData{
-  //private static final long serialVersionUID = 0;
+public class StructuredDataImpl implements StructuredData {
+  public static final String FULL = "full";
 
   private Map data = new HashMap();
 
@@ -18,9 +18,12 @@ public class StructuredDataImpl implements StructuredData{
 
   private String message;
 
-  public StructuredDataImpl(final String id, final String msg) {
+  private String type;
+
+  public StructuredDataImpl(final String id, final String msg, final String type) {
     this.id = id;
     this.message = msg;
+    this.type = type;
   }
 
   protected StructuredDataImpl() {
@@ -38,6 +41,17 @@ public class StructuredDataImpl implements StructuredData{
     this.id = id;
   }
 
+  public String getType() {
+    return type;
+  }
+
+  protected void setType(String type) {
+    if (type.length() > 32) {
+      throw new IllegalArgumentException("Structured data type exceeds maximum length of 32 characters: " + type);
+    }
+    this.type = type;
+  }
+
   public String getMessage() {
     return message;
   }
@@ -52,33 +66,75 @@ public class StructuredDataImpl implements StructuredData{
 
   /**
    * Format the Structured data as described in RFC 5424.
+   * @return The formatted String.
+   */
+  public final String asString() {
+    return asString(FULL, null, null);
+  }
+
+  /**
+   * Format the Structured data as described in RFC 5424.
    * @param format The format identifier. Ignored in this implementation.
    * @return The formatted String.
    */
   public String asString(String format) {
-    StringBuilder builder = new StringBuilder();
+    return asString(format, null, null);
+  }
+  /**
+   * Format the Structured data as described in RFC 5424.
+   * @param format "full" will include the type and message. null will return only the STRUCTURED-DATA as
+   * described in RFC 5424
+   * @param structuredDataId The SD-ID as described in RFC 5424. If null the value in the StructuredData
+   * will be used.
+   * @param maps Additional data to include.
+   * @return The formatted String.
+   */
+  public final String asString(String format, String structuredDataId, Map[] maps) {
+    StringBuffer sb = new StringBuffer();
+    boolean full = FULL.equals(format);
+    if (full) {
+      String type = getType();
+      if (type == null) {
+        return sb.toString();
+      }
+      sb.append(getType()).append(" ");
+    }
     String id = getId();
     if (id == null) {
-
+      id = structuredDataId;
     }
-    builder.append("[");
-    builder.append(getId());
-    Iterator iter = getData().entrySet().iterator();
+    if (id == null) {
+      return sb.toString();
+    }
+    sb.append("[");
+    sb.append(id);
+    appendMap(getData(), sb);
+    if (maps != null) {
+      for (int i = 0; i < maps.length; ++i) {
+        appendMap(maps[i], sb);
+      }
+    }
+    sb.append("]");
+    if (full) {
+      String msg = getMessage();
+      if (msg != null) {
+        sb.append(" ").append(msg);
+      }
+    }
+    return sb.toString();
+  }
+
+  private void appendMap(Map map, StringBuffer sb) {
+    Iterator iter = map.entrySet().iterator();
     while (iter.hasNext()) {
       Map.Entry entry = (Map.Entry) iter.next();
-      builder.append(" ");
-      builder.append(entry.getKey()).append("=\"").append(entry.getValue()).append("\"");
+      sb.append(" ");
+      sb.append(entry.getKey()).append("=\"").append(entry.getValue()).append("\"");
     }
-    builder.append("]");
-    String msg = getMessage();
-    if (msg != null) {
-      builder.append(" ").append(msg);
-    }
-    return builder.toString();
   }
 
   public String toString() {
-    return asString(null);
+    return asString((String) null);
   }
 
   @Override
@@ -95,6 +151,9 @@ public class StructuredDataImpl implements StructuredData{
     if (data != null ? !data.equals(that.data) : that.data != null) {
       return false;
     }
+    if (type != null ? !type.equals(that.type) : that.type != null) {
+      return false;
+    }
     if (id != null ? !id.equals(that.id) : that.id != null) {
       return false;
     }
@@ -108,6 +167,7 @@ public class StructuredDataImpl implements StructuredData{
   @Override
   public int hashCode() {
     int result = data != null ? data.hashCode() : 0;
+    result = 31 * result + (type != null ? type.hashCode() : 0);
     result = 31 * result + (id != null ? id.hashCode() : 0);
     result = 31 * result + (message != null ? message.hashCode() : 0);
     return result;

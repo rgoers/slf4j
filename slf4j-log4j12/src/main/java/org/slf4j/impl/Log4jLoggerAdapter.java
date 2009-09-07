@@ -598,11 +598,9 @@ public final class Log4jLoggerAdapter extends MarkerIgnoringBase implements
    * @param callerFQCN The fully qualified class name of the <b>caller</b>
    * @param level
    * @param data
-   * @param argArray
    * @param t
    */
-  public void log(Marker marker, String callerFQCN, int level, StructuredData data, String format,
-                  Object[] argArray, Throwable t) {
+  public void log(Marker marker, String callerFQCN, int level, StructuredData data, String format, Throwable t) {
     logger.log(callerFQCN, getLog4jLevel(level), data.asString(format), t);
   }
 

@@ -3,6 +3,7 @@ package org.slf4j.ext;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Marker;
 import org.slf4j.MarkerFactory;
+import org.slf4j.StructuredData;
 import org.slf4j.spi.LocationAwareLogger;
 import org.slf4j.spi.XLocationAwareLogger;
 
@@ -45,12 +46,29 @@ public class EventLogger {
   public static void logEvent(EventData data, String format) {
     if (eventLogger.instanceofXLAL) {
       ((XLocationAwareLogger) eventLogger.logger).log(EVENT_MARKER, FQCN,
-          XLocationAwareLogger.INFO_INT, data, format, null, null);
+          XLocationAwareLogger.INFO_INT, data, format, null);
     } else if (eventLogger.instanceofLAL) {
       ((LocationAwareLogger) eventLogger.logger).log(EVENT_MARKER, FQCN,
           LocationAwareLogger.INFO_INT, data.toXML(), null);
     } else {
       eventLogger.logger.info(EVENT_MARKER, data.toXML(), data);
+    }
+  }
+
+  /**
+   * Logs structured data
+   * @param data The StructuredData
+   */
+  public static void logEvent(StructuredData data) {
+    final String format = "full";
+     if (eventLogger.instanceofXLAL) {
+      ((XLocationAwareLogger) eventLogger.logger).log(EVENT_MARKER, FQCN,
+          XLocationAwareLogger.INFO_INT, data, format, null);
+    } else if (eventLogger.instanceofLAL) {
+      ((LocationAwareLogger) eventLogger.logger).log(EVENT_MARKER, FQCN,
+          LocationAwareLogger.INFO_INT, data.asString(format), null);
+    } else {
+      eventLogger.logger.info(EVENT_MARKER, data.asString(format), data);
     }
   }
 }
