@@ -22,6 +22,9 @@
 
 package org.slf4j.ext;
 
+import org.slf4j.StructuredDataImpl;
+import org.slf4j.StructuredData;
+
 import java.io.Serializable;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -126,7 +129,7 @@ public class EventData extends StructuredDataImpl implements Serializable {
    * @return The event identifier
    */
   public String getEventId() {
-    return getId();
+    return getId().toString();
   }
 
   /**
@@ -383,7 +386,7 @@ public class EventData extends StructuredDataImpl implements Serializable {
     public Object remove(Object key) {
       Object oldValue = get(key);
       if (EVENT_ID.equals(key)) {
-        setId(null);
+        setId((StructuredData.Id) null);
       } else if (EVENT_MESSAGE.equals(key)) {
         setMessage(null);
       } else if (EVENT_TYPE.equals(key)) {

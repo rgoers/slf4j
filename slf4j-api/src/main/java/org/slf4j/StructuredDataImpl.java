@@ -1,6 +1,4 @@
-package org.slf4j.ext;
-
-import org.slf4j.StructuredData;
+package org.slf4j;
 
 import java.util.Map;
 import java.util.HashMap;
@@ -10,17 +8,25 @@ import java.util.Iterator;
  *
  */
 public class StructuredDataImpl implements StructuredData {
+  private static final long serialVersionUID = 1703221292892071920L;
+
   public static final String FULL = "full";
 
   private Map data = new HashMap();
 
-  private String id;
+  private StructuredData.Id id;
 
   private String message;
 
   private String type;
 
   public StructuredDataImpl(final String id, final String msg, final String type) {
+    this.id = new Id(id, null, null);
+    this.message = msg;
+    this.type = type;
+  }
+
+  public StructuredDataImpl(final StructuredData.Id id, final String msg, final String type) {
     this.id = id;
     this.message = msg;
     this.type = type;
@@ -30,14 +36,15 @@ public class StructuredDataImpl implements StructuredData {
 
   }
 
-  public String getId() {
+  public StructuredData.Id getId() {
     return id;
   }
 
   protected void setId(String id) {
-    if (id.length() > 32) {
-      throw new IllegalArgumentException("Structured data id exceeds maximum length of 32 characters: " + id);
-    }
+    this.id = new StructuredData.Id(id, null, null);
+  }
+
+  protected void setId(StructuredData.Id id) {
     this.id = id;
   }
 
@@ -89,7 +96,7 @@ public class StructuredDataImpl implements StructuredData {
    * @param maps Additional data to include.
    * @return The formatted String.
    */
-  public final String asString(String format, String structuredDataId, Map[] maps) {
+  public final String asString(String format, StructuredData.Id structuredDataId, Map[] maps) {
     StringBuffer sb = new StringBuffer();
     boolean full = FULL.equals(format);
     if (full) {
@@ -99,11 +106,13 @@ public class StructuredDataImpl implements StructuredData {
       }
       sb.append(getType()).append(" ");
     }
-    String id = getId();
-    if (id == null) {
+    StructuredData.Id id = getId();
+    if (id != null) {
+      id = id.makeId(structuredDataId);
+    } else {
       id = structuredDataId;
     }
-    if (id == null) {
+    if (id == null || id.getName() == null || getData().size() == 0) {
       return sb.toString();
     }
     sb.append("[");
@@ -137,7 +146,6 @@ public class StructuredDataImpl implements StructuredData {
     return asString((String) null);
   }
 
-  @Override
   public boolean equals(Object o) {
     if (this == o) {
       return true;
@@ -164,7 +172,6 @@ public class StructuredDataImpl implements StructuredData {
     return true;
   }
 
-  @Override
   public int hashCode() {
     int result = data != null ? data.hashCode() : 0;
     result = 31 * result + (type != null ? type.hashCode() : 0);
