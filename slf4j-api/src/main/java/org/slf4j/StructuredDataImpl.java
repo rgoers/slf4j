@@ -14,19 +14,19 @@ public class StructuredDataImpl implements StructuredData {
 
   private Map data = new HashMap();
 
-  private StructuredData.Id id;
+  private StructuredDataId id;
 
   private String message;
 
   private String type;
 
   public StructuredDataImpl(final String id, final String msg, final String type) {
-    this.id = new Id(id, null, null);
+    this.id = new StructuredDataId(id, null, null);
     this.message = msg;
     this.type = type;
   }
 
-  public StructuredDataImpl(final StructuredData.Id id, final String msg, final String type) {
+  public StructuredDataImpl(final StructuredDataId id, final String msg, final String type) {
     this.id = id;
     this.message = msg;
     this.type = type;
@@ -36,15 +36,15 @@ public class StructuredDataImpl implements StructuredData {
 
   }
 
-  public StructuredData.Id getId() {
+  public StructuredDataId getId() {
     return id;
   }
 
   protected void setId(String id) {
-    this.id = new StructuredData.Id(id, null, null);
+    this.id = new StructuredDataId(id, null, null);
   }
 
-  protected void setId(StructuredData.Id id) {
+  protected void setId(StructuredDataId id) {
     this.id = id;
   }
 
@@ -96,7 +96,7 @@ public class StructuredDataImpl implements StructuredData {
    * @param maps Additional data to include.
    * @return The formatted String.
    */
-  public final String asString(String format, StructuredData.Id structuredDataId, Map[] maps) {
+  public final String asString(String format, StructuredDataId structuredDataId, Map[] maps) {
     StringBuffer sb = new StringBuffer();
     boolean full = FULL.equals(format);
     if (full) {
@@ -106,7 +106,7 @@ public class StructuredDataImpl implements StructuredData {
       }
       sb.append(getType()).append(" ");
     }
-    StructuredData.Id id = getId();
+    StructuredDataId id = getId();
     if (id != null) {
       id = id.makeId(structuredDataId);
     } else {
