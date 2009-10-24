@@ -82,14 +82,12 @@ public interface StructuredData extends Serializable {
   String asString(String format);
 
   /**
-   * Formats the structured data as described in RFC5424 including the data in the additional maps
-   * if any are present.
+   * Formats the structured data as described in RFC5424.
    *
    * @param format           The format identifier.
    * @param id               The default SD-ID as described in RFC 5424. This value will be used if
    *                         not id is present in the StructuredData.
-   * @param maps             Additional data to include.
    * @return The formatted String.
    */
-  String asString(String format, StructuredDataId id, Map[] maps);
+  String asString(String format, StructuredDataId id);
 }

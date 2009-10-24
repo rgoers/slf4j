@@ -76,7 +76,7 @@ public class StructuredDataImpl implements StructuredData {
    * @return The formatted String.
    */
   public final String asString() {
-    return asString(FULL, null, null);
+    return asString(FULL, null);
   }
 
   /**
@@ -85,7 +85,7 @@ public class StructuredDataImpl implements StructuredData {
    * @return The formatted String.
    */
   public String asString(String format) {
-    return asString(format, null, null);
+    return asString(format, null);
   }
   /**
    * Format the Structured data as described in RFC 5424.
@@ -93,10 +93,9 @@ public class StructuredDataImpl implements StructuredData {
    * described in RFC 5424
    * @param structuredDataId The SD-ID as described in RFC 5424. If null the value in the StructuredData
    * will be used.
-   * @param maps Additional data to include.
    * @return The formatted String.
    */
-  public final String asString(String format, StructuredDataId structuredDataId, Map[] maps) {
+  public final String asString(String format, StructuredDataId structuredDataId) {
     StringBuffer sb = new StringBuffer();
     boolean full = FULL.equals(format);
     if (full) {
@@ -118,11 +117,6 @@ public class StructuredDataImpl implements StructuredData {
     sb.append("[");
     sb.append(id);
     appendMap(getData(), sb);
-    if (maps != null) {
-      for (int i = 0; i < maps.length; ++i) {
-        appendMap(maps[i], sb);
-      }
-    }
     sb.append("]");
     if (full) {
       String msg = getMessage();
