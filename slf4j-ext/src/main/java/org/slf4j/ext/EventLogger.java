@@ -42,11 +42,12 @@ public class EventLogger {
    * @param data The EventData.
    * @param format the format to use when converting the data to a String in Loggers that do not
    * support structured data.
+   * @deprecated Use logEvent(StructuredData data) instead.
    */
   public static void logEvent(EventData data, String format) {
     if (eventLogger.instanceofXLAL) {
       ((XLocationAwareLogger) eventLogger.logger).log(EVENT_MARKER, FQCN,
-          XLocationAwareLogger.INFO_INT, data, format, null);
+          XLocationAwareLogger.INFO_INT, data.getEventData(), format, null);
     } else if (eventLogger.instanceofLAL) {
       ((LocationAwareLogger) eventLogger.logger).log(EVENT_MARKER, FQCN,
           LocationAwareLogger.INFO_INT, data.toXML(), null);

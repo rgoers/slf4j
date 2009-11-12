@@ -3,6 +3,7 @@ package org.slf4j;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Collections;
 
 /**
  *
@@ -68,7 +69,34 @@ public class StructuredDataImpl implements StructuredData {
   }
 
   public Map getData() {
-    return data;
+    return Collections.unmodifiableMap(data);
+  }
+
+  public void clear() {
+    data.clear();
+  }
+
+  public void put(String key, String value) {
+    if (value == null) {
+      throw new IllegalArgumentException("No value provided for key " + key);
+    }
+    if (value.length() > 32) {
+      throw new IllegalArgumentException("Structured data values are limited to 32 characters. key: " + key +
+        " value: " + value);
+    }
+    data.put(key, value);
+  }
+
+  public void putAll(Map map) {
+    data.putAll(map);
+  }
+
+  public String get(String key) {
+    return (String) data.get(key);
+  }
+
+  public String remove(String key) {
+    return (String) data.remove(key);
   }
 
   /**

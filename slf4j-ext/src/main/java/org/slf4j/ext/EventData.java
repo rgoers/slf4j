@@ -23,38 +23,38 @@
 package org.slf4j.ext;
 
 import org.slf4j.StructuredDataImpl;
-import org.slf4j.StructuredDataId;
+import org.slf4j.StructuredData;
 
 import java.io.Serializable;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
-import java.util.Collection;
-import java.util.AbstractSet;
-import java.util.AbstractCollection;
-import java.util.HashMap;
 import java.beans.XMLDecoder;
 import java.beans.XMLEncoder;
 import java.beans.ExceptionListener;
+import java.text.SimpleDateFormat;
+import java.text.ParseException;
 
 /**
  * Base class for Event Data. Event Data contains data to be logged about an
  * event. Users may extend this class for each EventType they want to log.
  *
  * @author Ralph Goers
+ * @deprecated Use StructuredDataImpl instead.
  */
-public class EventData extends StructuredDataImpl implements Serializable {
+public class EventData implements Serializable {
 
   private static final long serialVersionUID = 153270778642103985L;
 
+  private StructuredEventData eventData = new StructuredEventData();
   public static final String EVENT_MESSAGE = "EventMessage";
   public static final String EVENT_TYPE = "EventType";
   public static final String EVENT_DATETIME = "EventDateTime";
   public static final String EVENT_ID = "EventId";
-  private EventMap eventData = new EventMap(getData());
+  private static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSS";
 
   /**
    * Default Constructor
@@ -69,7 +69,12 @@ public class EventData extends StructuredDataImpl implements Serializable {
    *          The event data.
    */
   public EventData(Map<String, Object> map) {
-    eventData.putAll(map);
+    Map<String, Object> tmp = new HashMap<String, Object>(map);
+    String id = (String) tmp.remove(EVENT_ID);
+    String msg = (String) tmp.remove(EVENT_MESSAGE);
+    String type = (String) tmp.remove(EVENT_TYPE);
+    eventData = new StructuredEventData(id, msg, type);
+    eventData.putAll(tmp);
   }
 
   /**
@@ -84,7 +89,11 @@ public class EventData extends StructuredDataImpl implements Serializable {
     ByteArrayInputStream bais = new ByteArrayInputStream(xml.getBytes());
     try {
       XMLDecoder decoder = new XMLDecoder(bais);
-      eventData.putAll((Map<String, Object>) decoder.readObject());
+      Map<String, Object> map = (Map<String, Object>) decoder.readObject();
+      String id = (String) map.remove(EVENT_ID);
+      String msg = (String) map.remove(EVENT_MESSAGE);
+      String type = (String) map.remove(EVENT_TYPE);
+      this.eventData = new StructuredEventData(id, msg, type);
     } catch (Exception e) {
       throw new EventException("Error decoding " + xml, e);
     }
@@ -96,16 +105,20 @@ public class EventData extends StructuredDataImpl implements Serializable {
    * @return an XML String containing all the EventDAta items.
    */
   public String toXML() {
-    return toXML(eventData);
+    Map<String, Object> map = new HashMap<String, Object>();
+    map.putAll(eventData.getData());
+    map.put(EVENT_MESSAGE, eventData.getMessage());
+    map.put(EVENT_TYPE, eventData.getType());
+    map.put(EVENT_ID, eventData.getId().toString());
+    return toXML(map);
   }
 
   /**
    * Serialize all the EventData items into an XML representation.
-   * @param map The map containing the event data.
+   *
    * @return an XML String containing all the EventDAta items.
    */
   public static String toXML(Map<String, Object> map) {
-    Map<String, Object> copy = new HashMap<String, Object>(map);
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
     try {
       XMLEncoder encoder = new XMLEncoder(baos);
@@ -114,7 +127,7 @@ public class EventData extends StructuredDataImpl implements Serializable {
           exception.printStackTrace();
         }
       });
-      encoder.writeObject(copy);
+      encoder.writeObject(map);
       encoder.close();
       return baos.toString();
     } catch (Exception e) {
@@ -129,7 +142,7 @@ public class EventData extends StructuredDataImpl implements Serializable {
    * @return The event identifier
    */
   public String getEventId() {
-    return getId().toString();
+    return eventData.getId().toString();
   }
 
   /**
@@ -142,7 +155,7 @@ public class EventData extends StructuredDataImpl implements Serializable {
     if (eventId == null) {
       throw new IllegalArgumentException("eventId cannot be null");
     }
-    setId(eventId);
+    eventData.setId(eventId);
   }
 
   /**
@@ -152,7 +165,7 @@ public class EventData extends StructuredDataImpl implements Serializable {
    *         none.
    */
   public String getMessage() {
-    return super.getMessage();
+    return eventData.getMessage();
   }
 
   /**
@@ -162,7 +175,7 @@ public class EventData extends StructuredDataImpl implements Serializable {
    *          The message text.
    */
   public void setMessage(String message) {
-    super.setMessage(message);
+    eventData.setMessage(message);
   }
 
   /**
@@ -171,7 +184,16 @@ public class EventData extends StructuredDataImpl implements Serializable {
    * @return The Date associated with the event.
    */
   public Date getEventDateTime() {
-    return (Date) getData().get(EVENT_DATETIME);
+    String eventDate = (String) eventData.getData().get(EVENT_DATETIME);
+    if (eventDate == null) {
+      return null;
+    }
+    SimpleDateFormat format = new SimpleDateFormat(DATE_FORMAT);
+    try {
+      return format.parse(eventDate);
+    } catch (ParseException pe) {
+      return null;
+    }
   }
 
   /**
@@ -182,7 +204,12 @@ public class EventData extends StructuredDataImpl implements Serializable {
    *          The event Date.
    */
   public void setEventDateTime(Date eventDateTime) {
-    getData().put(EVENT_DATETIME, eventDateTime);
+    if (eventDateTime == null) {
+      return;
+    }
+    SimpleDateFormat format = new SimpleDateFormat(DATE_FORMAT);
+    String date = format.format(eventDateTime);
+    eventData.put(EVENT_DATETIME, date);
   }
 
   /**
@@ -192,7 +219,7 @@ public class EventData extends StructuredDataImpl implements Serializable {
    *          The type of the event.
    */
   public void setEventType(String eventType) {
-    setType(eventType);
+    eventData.setType(eventType);
   }
 
   /**
@@ -201,7 +228,7 @@ public class EventData extends StructuredDataImpl implements Serializable {
    * @return The event type.
    */
   public String getEventType() {
-    return getType();
+    return eventData.getType();
   }
 
   /**
@@ -213,7 +240,7 @@ public class EventData extends StructuredDataImpl implements Serializable {
    *          The data associated with the key.
    */
   public void put(String name, Serializable obj) {
-    getData().put(name, obj);
+    eventData.put(name, obj.toString());
   }
 
   /**
@@ -225,13 +252,7 @@ public class EventData extends StructuredDataImpl implements Serializable {
    *         present.
    */
   public Serializable get(String name) {
-    Object obj = eventData.get(name);
-    if (obj == null) {
-      return null;
-    } else if (obj instanceof Serializable) {
-      return (Serializable) obj;
-    }
-    return obj.toString();
+    return (Serializable) eventData.getData().get(name);
   }
 
   /**
@@ -250,7 +271,7 @@ public class EventData extends StructuredDataImpl implements Serializable {
    * @return the number of attributes in the EventData.
    */
   public int getSize() {
-    return eventData.size();
+    return eventData.getData().size();
   }
 
   /**
@@ -259,7 +280,7 @@ public class EventData extends StructuredDataImpl implements Serializable {
    * @return an Iterator that can be used to access all the event attributes.
    */
   public Iterator<Map.Entry<String, Object>> getEntrySetIterator() {
-    return eventData.entrySet().iterator();
+    return eventData.getData().entrySet().iterator();
   }
 
   /**
@@ -269,6 +290,18 @@ public class EventData extends StructuredDataImpl implements Serializable {
    * @return The Map of attributes in this EventData instance.
    */
   public Map<String, Object> getEventMap() {
+    Map<String, Object> map = new HashMap<String, Object>(eventData.getData());
+    map.put(EVENT_ID, eventData.getId());
+    map.put(EVENT_TYPE, eventData.getType());
+    map.put(EVENT_MESSAGE, eventData.getMessage());
+    return map;
+  }
+
+  /**
+   * Return the underlying StructuredData object.
+   * @return The StructuredData Object.
+   */
+  public StructuredData getEventData() {
     return eventData;
   }
 
@@ -280,19 +313,6 @@ public class EventData extends StructuredDataImpl implements Serializable {
   @Override
   public String toString() {
     return toXML();
-  }
-
-  /**
-   * Format the EventData for printing.
-   * @param format The format identifier. This implementation supports "XML".
-   * @return The formatted EventData.
-   */
-  @Override
-  public String asString(String format) {
-    if ("XML".equalsIgnoreCase(format)) {
-      return toXML();
-    }
-    return super.asString(format);
   }
 
   /**
@@ -313,252 +333,48 @@ public class EventData extends StructuredDataImpl implements Serializable {
       return false;
     }
     Map<String, Object> map = (o instanceof EventData) ? ((EventData) o)
-        .eventData : (Map<String, Object>) o;
+        .getEventMap() : (Map<String, Object>) o;
 
-    return eventData.equals(map);
+    return map.equals(getEventMap());
   }
 
   /**
-   * The EventMap makes the underlying StructuredData look like a Map which is convenient for serialization to XML.
+   * Compute the hashCode for this EventData instance.
+   *
+   * @return The hashcode for this EventData instance.
    */
-  private final class EventMap implements Map<String, Object> {
+  @Override
+  public int hashCode() {
+    return this.eventData.hashCode();
+  }
 
-    private final Map<String, Object> parent;
+  private class StructuredEventData extends StructuredDataImpl {
+    private static final long serialVersionUID = 1093221292892071920L;
 
-    public EventMap(Map<String, Object> map) {
-      parent = map;
+    public StructuredEventData() {
     }
 
-    public int size() {
-      int count = 1;
-      if (getMessage() != null) {
-        ++count;
-      }
-      return parent.size() + count;
+    public StructuredEventData(final String id, final String msg, final String type) {
+      super(id, msg, type);
     }
 
-    public boolean isEmpty() {
-      return parent.isEmpty() && getId() == null && getMessage() == null;
+    public void setId(String id) {
+      super.setId(id);
     }
 
-    public Object get(Object key) {
-      if (EVENT_ID.equals(key)) {
-        return getId();
-      } else if (EVENT_MESSAGE.equals(key)) {
-        return getMessage();
-      } else if (EVENT_TYPE.equals(key)) {
-        return getType();
-      }
-      return parent.get(key);
+    public void setMessage(String msg) {
+      super.setMessage(msg);
     }
 
-    public boolean containsKey(Object key) {
-      if (EVENT_ID.equals(key)) {
-        return getId() == null;
-      } else if (EVENT_MESSAGE.equals(key)) {
-        return getMessage() == null;
-      } else if (EVENT_TYPE.equals(key)) {
-        return getType() == null;
-      }
-      return parent.containsKey(key);
+    public void setType(String type) {
+      super.setType(type);
     }
 
-    public Object put(String key, Object newValue) {
-      Object oldValue = get(key);
-      if (EVENT_ID.equals(key)) {
-        setId(newValue.toString());
-      } else if (EVENT_MESSAGE.equals(key)) {
-        setMessage(newValue.toString());
-      } else if (EVENT_TYPE.equals(key)) {
-        setType(newValue.toString());
-      } else {
-        parent.put(key, newValue);
+    public String asString(String format) {
+      if (format.equals("XML")) {
+        return toXML();
       }
-      return oldValue;
-    }
-
-    public void putAll(Map<? extends String, ?> map) {
-      for (Map.Entry<? extends String, ?> entry : map.entrySet()) {
-        put(entry.getKey(), entry.getValue());
-      }
-    }
-
-    public Object remove(Object key) {
-      Object oldValue = get(key);
-      if (EVENT_ID.equals(key)) {
-        setId((StructuredDataId) null);
-      } else if (EVENT_MESSAGE.equals(key)) {
-        setMessage(null);
-      } else if (EVENT_TYPE.equals(key)) {
-        setType(null);
-      } else {
-        parent.remove(key);
-      }
-      return oldValue;
-    }
-
-    public void clear() {
-      parent.clear();
-      setMessage(null);
-    }
-
-    public boolean containsValue(Object obj) {
-      return parent.containsValue(obj) || getId().equals(obj.toString()) || getMessage().equals(obj.toString());
-    }
-
-    public Set<String> keySet() {
-      return new EventKeySet();
-    }
-
-    public Collection<Object> values() {
-      return new EventValues();
-    }
-
-    public Set<Map.Entry<String, Object>> entrySet() {
-      return new EventEntrySet();
-    }
-
-    private class Entry implements Map.Entry<String, Object> {
-      private String key;
-      private Object value;
-
-      public Entry(String key, Object value) {
-        this.key = key;
-        this.value = value;
-      }
-      public String getKey() {
-        return key;
-      }
-
-      public Object getValue() {
-        return value;
-      }
-
-      public Object setValue(Object newValue) {
-        Object oldValue = value;
-        if (key.equals(EVENT_ID)) {
-          setEventId(newValue.toString());
-        } else if (key.equals(EVENT_MESSAGE)) {
-          setMessage(newValue.toString());
-        } else if (key.equals(EVENT_TYPE)) {
-          setType(newValue.toString());
-        }
-        value = newValue;
-        return oldValue;
-      }
-    }
-
-    private abstract class EventIterator<T> implements Iterator<T> {
-      protected Iterator<Map.Entry<String, Object>> iterator;
-      protected boolean iterId;
-      protected boolean iterMessage;
-      protected boolean iterType;
-      private Map.Entry<String, Object> current = null;
-
-      public EventIterator() {
-        iterator = getData().entrySet().iterator();
-        iterId = getId() != null;
-        iterMessage = getMessage() != null;
-        iterType = getType() != null;
-      }
-
-      public Map.Entry<String, Object> nextEntry() {
-        if (iterId) {
-          iterId = false;
-          current = new Entry(EVENT_ID, getId());
-        } else if (iterMessage) {
-          iterMessage = false;
-          current = new Entry(EVENT_MESSAGE, getMessage());
-        } else if (iterType) {
-          iterType = false;
-          current = new Entry(EVENT_TYPE, getType());
-        } else {
-          current = iterator.next();
-        }
-        return current;
-      }
-
-      public boolean hasNext() {
-        return iterator.hasNext() || iterId || iterMessage || iterType;
-      }
-
-      public void remove() {
-        if (current != null) {
-          EventMap.this.remove(current.getKey());
-        }
-      }
-    }
-
-    private final class EventKeyIterator extends EventIterator<String> {
-
-      public String next() {
-        return nextEntry().getKey();
-      }
-    }
-
-    private final class EventKeySet extends AbstractSet<String> {
-      public Iterator<String> iterator() {
-        return new EventKeyIterator();
-      }
-      public int size() {
-        return EventMap.this.size();
-      }
-      public boolean contains(Object o) {
-        return containsKey(o);
-      }
-      public boolean remove(Object o) {
-        return EventMap.this.remove(o) != null;
-      }
-      public void clear() {
-        EventMap.this.clear();
-      }
-    }
-
-    private final class EventValueIterator extends EventIterator<Object> {
-
-      public Object next() {
-        return nextEntry().getValue();
-      }
-    }
-
-    private final class EventValues extends AbstractCollection<Object> {
-      public Iterator<Object> iterator() {
-        return new EventValueIterator();
-      }
-      public int size() {
-        return EventMap.this.size();
-      }
-      public boolean contains(Object o) {
-        return containsValue(o);
-      }
-      public void clear() {
-        EventMap.this.clear();
-      }
-    }
-
-    private final class EventEntrySetIterator extends EventIterator<Map.Entry<String, Object>> {
-
-      public Map.Entry<String, Object> next() {
-        return nextEntry();
-      }
-    }
-
-    private final class EventEntrySet extends AbstractSet<Map.Entry<String, Object>> {
-      public Iterator<Map.Entry<String, Object>> iterator() {
-        return new EventEntrySetIterator();
-      }
-      public int size() {
-        return EventMap.this.size();
-      }
-      public boolean contains(Object o) {
-        return containsKey(o);
-      }
-      public boolean remove(Object o) {
-        return EventMap.this.remove(o) != null;
-      }
-      public void clear() {
-        EventMap.this.clear();
-      }
+      return asString(format, null);
     }
   }
 }

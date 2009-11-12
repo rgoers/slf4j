@@ -55,14 +55,44 @@ public interface StructuredData extends Serializable {
   String getMessage();
 
   /**
-   * Returns the data items and their values. Although the Map can contain Objects, the
-   * toString() method of the objects will be called when the objects are formatted for
-   * inclusion in log records. If the object is not serializable then the value of toString
-   * will be used when serialization is required.
+   * Returns an immutable Map of the data items and their values. In Java 5 this Map would
+   * be specified as Map<String, String>.
    *
    * @return The data item names (32 characters maximum) and their values.
    */
   Map getData();
+
+  /**
+   * Add all the items from a Map to the data Map.
+   * @param map The map to copy.
+   */
+  void putAll(Map map);
+
+  /**
+   * Add an item to the data Map.
+   * @param key The name of the item.
+   * @param value The value of the item.
+   */
+  void put(String key, String value);
+
+  /**
+   * Get a specific value from the data Map.
+   * @param key The name of the item.
+   * @return The value of the item.
+   */
+  String get(String key);
+
+  /**
+   * Remove an item from the data Map.
+   * @param key The name of the item to remove.
+   * @return The value of the item removed.
+   */
+  String remove(String key);
+
+  /**
+   * Clears the data map.
+   */
+  void clear();
 
   /**
    * Formats the structured data in the form [id key="value" ...] message as described in RFC 5424.
