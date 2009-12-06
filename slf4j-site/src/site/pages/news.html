@@ -21,21 +21,27 @@
 
   <p>Please note that you can receive SLF4J related announcements by
   subscribing to the <a
-  href="http://www.slf4j.org/mailman/listinfo/announce">SLF4J
+  href="http://www.qos.ch/mailman/listinfo/announce">QOS.ch
   announce</a> mailing list.
   </p>
 
   <hr noshade="noshade" size="1"/>
 
-  <h3>October 28th, 2009 - Release of SLF4J 1.5.9.RC1</h3>
+  <h3>December 3rd, 2009 - Release of SLF4J 1.5.10</h3>
 
-  <p>SLF4J version 1.5.9.RC1 consist of bug fixes and minor
+  <p>SLF4J version 1.5.10 consist of bug fixes and minor
   enhancements. It is totally backward compatible with SLF4J version
   1.5.8. However, the slf4j-ext module ships with a new package called
   <code>org.slf4j.cal10n</code> which adds <a
   href="localization.html">localized/internationalized logging</a>
   support as a thin layer built upon the <a
   href="http://cal10n.qos.ch">CAL10N API</a>.</p>
+
+  <p><a href="http://www.slf4j.org/android/">SLF4J-adroid</a>,
+  maintained by <a
+  href="http://dbis.cs.unibas.ch/team/thorsten-moller/dbis_staff_view">Thorsten
+  M&ouml;ller</a>, was added as a daugther project of SLF4J.
+  </p>
 
   <p>Added missing "Export-Package" declaration for cal10n in the OSGi
   manifest file for sfl4j-ext. This was requested in <a
@@ -69,6 +75,12 @@
   <p>Added missing OSGi manifest to the <em>log4j-over-slf4j</em>
   module as requested by Wade Poziombka in <a
   href="http://bugzilla.slf4j.org/show_bug.cgi?id=117">bug 117</a>.
+  </p>
+
+  <p>OSGi manifests produced by SLF4J now replace the '-' character by
+  '.' in compliance with the OSGi specification. This fixes <a
+  href="http://bugzilla.slf4j.org/show_bug.cgi?id=152">bug 152</a>
+  according to the patch supplied by Hugues Malphettes.
   </p>
 
   <p>Fixed packaging issue in jcl104-over-slf4j which inadvertently

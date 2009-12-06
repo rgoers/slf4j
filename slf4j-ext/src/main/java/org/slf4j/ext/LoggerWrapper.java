@@ -956,7 +956,7 @@ public class LoggerWrapper implements Logger {
     if (instanceofXLAL) {
       String formattedMessage = MessageFormatter.format(format, argArray);
       ((XLocationAwareLogger) logger).log(marker, fqcn,
-          XLocationAwareLogger.ERROR_INT, formattedMessage, argArray, null);     
+          XLocationAwareLogger.ERROR_INT, formattedMessage, argArray, null);
     } else if (instanceofLAL) {
       String formattedMessage = MessageFormatter.arrayFormat(format, argArray);
       ((LocationAwareLogger) logger).log(marker, fqcn,
