@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.Marker;
 import org.slf4j.helpers.MessageFormatter;
 import org.slf4j.spi.LocationAwareLogger;
-import org.slf4j.spi.XLocationAwareLogger;
 
 /**
  * A helper class wrapping an {@link org.slf4j.Logger}
@@ -28,22 +27,13 @@ public class LoggerWrapper implements Logger {
   // is this logger instance a LocationAwareLogger
   protected final boolean instanceofLAL;
 
-  // is this logger instance an XLocationAwareLogger
-  protected final boolean instanceofXLAL;
-
   public LoggerWrapper(Logger logger, String fqcn) {
     this.logger = logger;
     this.fqcn = fqcn;
     if (logger instanceof LocationAwareLogger) {
       instanceofLAL = true;
-      if (logger instanceof XLocationAwareLogger) {
-        instanceofXLAL = true;
-      } else {
-        instanceofXLAL = false;
-      }
     } else {
       instanceofLAL = false;
-      instanceofXLAL = false;
     }
   }
 
@@ -83,12 +73,7 @@ public class LoggerWrapper implements Logger {
     if (!logger.isTraceEnabled())
       return;
 
-    if (instanceofXLAL) {
-      String formattedMessage = MessageFormatter.format(format, arg);
-      ((XLocationAwareLogger) logger).log(null, fqcn,
-          XLocationAwareLogger.TRACE_INT, formattedMessage, new Object[] {arg}, null);
-    }
-    else if (instanceofLAL) {
+    if (instanceofLAL) {
       String formattedMessage = MessageFormatter.format(format, arg);
       ((LocationAwareLogger) logger).log(null, fqcn,
           LocationAwareLogger.TRACE_INT, formattedMessage, null);
@@ -104,12 +89,7 @@ public class LoggerWrapper implements Logger {
     if (!logger.isTraceEnabled())
       return;
 
-    if (instanceofXLAL) {
-      String formattedMessage = MessageFormatter.format(format, arg1, arg2);
-      ((XLocationAwareLogger) logger).log(null, fqcn,
-          XLocationAwareLogger.TRACE_INT, formattedMessage, new Object[] {arg1, arg2}, null);
-    }
-    else if (instanceofLAL) {
+    if (instanceofLAL) {
       String formattedMessage = MessageFormatter.format(format, arg1, arg2);
       ((LocationAwareLogger) logger).log(null, fqcn,
           LocationAwareLogger.TRACE_INT, formattedMessage, null);
@@ -121,16 +101,11 @@ public class LoggerWrapper implements Logger {
   /**
    * Delegate to the appropriate method of the underlying logger.
    */
-  public void trace(String format, Object... argArray) {
+  public void trace(String format, Object[] argArray) {
     if (!logger.isTraceEnabled())
       return;
 
-    if (instanceofXLAL) {
-      String formattedMessage = MessageFormatter.format(format, argArray);
-      ((XLocationAwareLogger) logger).log(null, fqcn,
-          XLocationAwareLogger.TRACE_INT, formattedMessage, argArray, null);
-    }
-    else if (instanceofLAL) {
+    if (instanceofLAL) {
       String formattedMessage = MessageFormatter.arrayFormat(format, argArray);
       ((LocationAwareLogger) logger).log(null, fqcn,
           LocationAwareLogger.TRACE_INT, formattedMessage, null);
@@ -174,11 +149,7 @@ public class LoggerWrapper implements Logger {
   public void trace(Marker marker, String format, Object arg) {
     if (!logger.isTraceEnabled())
       return;
-    if (instanceofXLAL) {
-      String formattedMessage = MessageFormatter.format(format, arg);
-      ((XLocationAwareLogger) logger).log(marker, fqcn,
-          XLocationAwareLogger.TRACE_INT, formattedMessage, new Object[] {arg}, null);
-    } else if (instanceofLAL) {
+    if (instanceofLAL) {
       String formattedMessage = MessageFormatter.format(format, arg);
       ((LocationAwareLogger) logger).log(marker, fqcn,
           LocationAwareLogger.TRACE_INT, formattedMessage, null);
@@ -193,11 +164,7 @@ public class LoggerWrapper implements Logger {
   public void trace(Marker marker, String format, Object arg1, Object arg2) {
     if (!logger.isTraceEnabled())
       return;
-    if (instanceofXLAL) {
-      String formattedMessage = MessageFormatter.format(format, arg1, arg2);
-      ((XLocationAwareLogger) logger).log(marker, fqcn,
-          XLocationAwareLogger.TRACE_INT, formattedMessage, new Object[] {arg1, arg2}, null);
-    } else if (instanceofLAL) {
+    if (instanceofLAL) {
       String formattedMessage = MessageFormatter.format(format, arg1, arg2);
       ((LocationAwareLogger) logger).log(marker, fqcn,
           LocationAwareLogger.TRACE_INT, formattedMessage, null);
@@ -209,14 +176,10 @@ public class LoggerWrapper implements Logger {
   /**
    * Delegate to the appropriate method of the underlying logger.
    */
-  public void trace(Marker marker, String format, Object... argArray) {
+  public void trace(Marker marker, String format, Object[] argArray) {
     if (!logger.isTraceEnabled())
       return;
-    if (instanceofXLAL) {
-      String formattedMessage = MessageFormatter.format(format, argArray);
-      ((XLocationAwareLogger) logger).log(marker, fqcn,
-          XLocationAwareLogger.TRACE_INT, formattedMessage, argArray, null);
-    } else if (instanceofLAL) {
+    if (instanceofLAL) {
       String formattedMessage = MessageFormatter.arrayFormat(format, argArray);
       ((LocationAwareLogger) logger).log(marker, fqcn,
           LocationAwareLogger.TRACE_INT, formattedMessage, null);
@@ -274,11 +237,8 @@ public class LoggerWrapper implements Logger {
   public void debug(String format, Object arg) {
     if (!logger.isDebugEnabled())
       return;
-    if (instanceofXLAL) {
-      String formattedMessage = MessageFormatter.format(format, arg);
-      ((XLocationAwareLogger) logger).log(null, fqcn,
-          XLocationAwareLogger.DEBUG_INT, formattedMessage, new Object[] {arg}, null);
-    } else if (instanceofLAL) {
+
+    if (instanceofLAL) {
       String formattedMessage = MessageFormatter.format(format, arg);
       ((LocationAwareLogger) logger).log(null, fqcn,
           LocationAwareLogger.DEBUG_INT, formattedMessage, null);
@@ -293,11 +253,8 @@ public class LoggerWrapper implements Logger {
   public void debug(String format, Object arg1, Object arg2) {
     if (!logger.isDebugEnabled())
       return;
-    if (instanceofXLAL) {
-      String formattedMessage = MessageFormatter.format(format, arg1, arg2);
-      ((XLocationAwareLogger) logger).log(null, fqcn,
-          XLocationAwareLogger.DEBUG_INT, formattedMessage, new Object[] {arg1, arg2}, null);
-    } else if (instanceofLAL) {
+
+    if (instanceofLAL) {
       String formattedMessage = MessageFormatter.format(format, arg1, arg2);
       ((LocationAwareLogger) logger).log(null, fqcn,
           LocationAwareLogger.DEBUG_INT, formattedMessage, null);
@@ -309,14 +266,11 @@ public class LoggerWrapper implements Logger {
   /**
    * Delegate to the appropriate method of the underlying logger.
    */
-  public void debug(String format, Object... argArray) {
+  public void debug(String format, Object[] argArray) {
     if (!logger.isDebugEnabled())
       return;
-    if (instanceofXLAL) {
-      String formattedMessage = MessageFormatter.format(format, argArray);
-      ((XLocationAwareLogger) logger).log(null, fqcn,
-          XLocationAwareLogger.DEBUG_INT, formattedMessage, argArray, null);
-    } else if (instanceofLAL) {
+
+    if (instanceofLAL) {
       String formattedMessage = MessageFormatter.arrayFormat(format, argArray);
       ((LocationAwareLogger) logger).log(null, fqcn,
           LocationAwareLogger.DEBUG_INT, formattedMessage, null);
@@ -360,11 +314,7 @@ public class LoggerWrapper implements Logger {
   public void debug(Marker marker, String format, Object arg) {
     if (!logger.isDebugEnabled())
       return;
-    if (instanceofXLAL) {
-      String formattedMessage = MessageFormatter.format(format, arg);
-      ((XLocationAwareLogger) logger).log(marker, fqcn,
-          XLocationAwareLogger.DEBUG_INT, formattedMessage, new Object[] {arg}, null);
-    } else if (instanceofLAL) {
+    if (instanceofLAL) {
       String formattedMessage = MessageFormatter.format(format, arg);
       ((LocationAwareLogger) logger).log(marker, fqcn,
           LocationAwareLogger.DEBUG_INT, formattedMessage, null);
@@ -379,11 +329,7 @@ public class LoggerWrapper implements Logger {
   public void debug(Marker marker, String format, Object arg1, Object arg2) {
     if (!logger.isDebugEnabled())
       return;
-    if (instanceofXLAL) {
-      String formattedMessage = MessageFormatter.format(format, arg1, arg2);
-      ((XLocationAwareLogger) logger).log(marker, fqcn,
-          XLocationAwareLogger.DEBUG_INT, formattedMessage, new Object[] {arg1, arg2}, null);
-    } else if (instanceofLAL) {
+    if (instanceofLAL) {
       String formattedMessage = MessageFormatter.format(format, arg1, arg2);
       ((LocationAwareLogger) logger).log(marker, fqcn,
           LocationAwareLogger.DEBUG_INT, formattedMessage, null);
@@ -395,14 +341,10 @@ public class LoggerWrapper implements Logger {
   /**
    * Delegate to the appropriate method of the underlying logger.
    */
-  public void debug(Marker marker, String format, Object... argArray) {
+  public void debug(Marker marker, String format, Object[] argArray) {
     if (!logger.isDebugEnabled())
       return;
-    if (instanceofXLAL) {
-      String formattedMessage = MessageFormatter.format(format, argArray);
-      ((XLocationAwareLogger) logger).log(marker, fqcn,
-          XLocationAwareLogger.DEBUG_INT, formattedMessage, argArray, null);
-    } else if (instanceofLAL) {
+    if (instanceofLAL) {
       String formattedMessage = MessageFormatter.arrayFormat(format, argArray);
       ((LocationAwareLogger) logger).log(marker, fqcn,
           LocationAwareLogger.DEBUG_INT, formattedMessage, null);
@@ -460,11 +402,8 @@ public class LoggerWrapper implements Logger {
   public void info(String format, Object arg) {
     if (!logger.isInfoEnabled())
       return;
-    if (instanceofXLAL) {
-      String formattedMessage = MessageFormatter.format(format, arg);
-      ((XLocationAwareLogger) logger).log(null, fqcn,
-          XLocationAwareLogger.INFO_INT, formattedMessage, new Object[] {arg}, null);
-    } else if (instanceofLAL) {
+
+    if (instanceofLAL) {
       String formattedMessage = MessageFormatter.format(format, arg);
       ((LocationAwareLogger) logger).log(null, fqcn,
           LocationAwareLogger.INFO_INT, formattedMessage, null);
@@ -479,11 +418,8 @@ public class LoggerWrapper implements Logger {
   public void info(String format, Object arg1, Object arg2) {
     if (!logger.isInfoEnabled())
       return;
-    if (instanceofXLAL) {
-      String formattedMessage = MessageFormatter.format(format, arg1, arg2);
-      ((XLocationAwareLogger) logger).log(null, fqcn,
-          XLocationAwareLogger.INFO_INT, formattedMessage, new Object[] {arg1, arg2}, null);
-    } else if (instanceofLAL) {
+
+    if (instanceofLAL) {
       String formattedMessage = MessageFormatter.format(format, arg1, arg2);
       ((LocationAwareLogger) logger).log(null, fqcn,
           LocationAwareLogger.INFO_INT, formattedMessage, null);
@@ -495,14 +431,11 @@ public class LoggerWrapper implements Logger {
   /**
    * Delegate to the appropriate method of the underlying logger.
    */
-  public void info(String format, Object... argArray) {
+  public void info(String format, Object[] argArray) {
     if (!logger.isInfoEnabled())
       return;
-    if (instanceofXLAL) {
-      String formattedMessage = MessageFormatter.format(format, argArray);
-      ((XLocationAwareLogger) logger).log(null, fqcn,
-          XLocationAwareLogger.INFO_INT, formattedMessage, argArray, null);
-    } else if (instanceofLAL) {
+
+    if (instanceofLAL) {
       String formattedMessage = MessageFormatter.arrayFormat(format, argArray);
       ((LocationAwareLogger) logger).log(null, fqcn,
           LocationAwareLogger.INFO_INT, formattedMessage, null);
@@ -546,11 +479,7 @@ public class LoggerWrapper implements Logger {
   public void info(Marker marker, String format, Object arg) {
     if (!logger.isInfoEnabled())
       return;
-    if (instanceofXLAL) {
-      String formattedMessage = MessageFormatter.format(format, arg);
-      ((XLocationAwareLogger) logger).log(marker, fqcn,
-          XLocationAwareLogger.INFO_INT, formattedMessage, new Object[] {arg}, null);
-    } else if (instanceofLAL) {
+    if (instanceofLAL) {
       String formattedMessage = MessageFormatter.format(format, arg);
       ((LocationAwareLogger) logger).log(marker, fqcn,
           LocationAwareLogger.INFO_INT, formattedMessage, null);
@@ -565,11 +494,7 @@ public class LoggerWrapper implements Logger {
   public void info(Marker marker, String format, Object arg1, Object arg2) {
     if (!logger.isInfoEnabled())
       return;
-    if (instanceofXLAL) {
-      String formattedMessage = MessageFormatter.format(format, arg1, arg2);
-      ((XLocationAwareLogger) logger).log(marker, fqcn,
-          XLocationAwareLogger.INFO_INT, formattedMessage, new Object[] {arg1, arg2}, null);
-    } else if (instanceofLAL) {
+    if (instanceofLAL) {
       String formattedMessage = MessageFormatter.format(format, arg1, arg2);
       ((LocationAwareLogger) logger).log(marker, fqcn,
           LocationAwareLogger.INFO_INT, formattedMessage, null);
@@ -581,14 +506,10 @@ public class LoggerWrapper implements Logger {
   /**
    * Delegate to the appropriate method of the underlying logger.
    */
-  public void info(Marker marker, String format, Object... argArray) {
+  public void info(Marker marker, String format, Object[] argArray) {
     if (!logger.isInfoEnabled())
       return;
-    if (instanceofXLAL) {
-      String formattedMessage = MessageFormatter.format(format, argArray);
-      ((XLocationAwareLogger) logger).log(marker, fqcn,
-          XLocationAwareLogger.INFO_INT, formattedMessage, argArray, null);
-    } else if (instanceofLAL) {
+    if (instanceofLAL) {
       String formattedMessage = MessageFormatter.arrayFormat(format, argArray);
       ((LocationAwareLogger) logger).log(marker, fqcn,
           LocationAwareLogger.INFO_INT, formattedMessage, null);
@@ -643,11 +564,8 @@ public class LoggerWrapper implements Logger {
   public void warn(String format, Object arg) {
     if (!logger.isWarnEnabled())
       return;
-    if (instanceofXLAL) {
-      String formattedMessage = MessageFormatter.format(format, arg);
-      ((XLocationAwareLogger) logger).log(null, fqcn,
-          XLocationAwareLogger.WARN_INT, formattedMessage, new Object[] {arg}, null);
-    } else if (instanceofLAL) {
+
+    if (instanceofLAL) {
       String formattedMessage = MessageFormatter.format(format, arg);
       ((LocationAwareLogger) logger).log(null, fqcn,
           LocationAwareLogger.WARN_INT, formattedMessage, null);
@@ -662,11 +580,8 @@ public class LoggerWrapper implements Logger {
   public void warn(String format, Object arg1, Object arg2) {
     if (!logger.isWarnEnabled())
       return;
-    if (instanceofXLAL) {
-      String formattedMessage = MessageFormatter.format(format, arg1, arg2);
-      ((XLocationAwareLogger) logger).log(null, fqcn,
-          XLocationAwareLogger.WARN_INT, formattedMessage, new Object[] {arg1, arg2}, null);
-    } else if (instanceofLAL) {
+
+    if (instanceofLAL) {
       String formattedMessage = MessageFormatter.format(format, arg1, arg2);
       ((LocationAwareLogger) logger).log(null, fqcn,
           LocationAwareLogger.WARN_INT, formattedMessage, null);
@@ -678,14 +593,11 @@ public class LoggerWrapper implements Logger {
   /**
    * Delegate to the appropriate method of the underlying logger.
    */
-  public void warn(String format, Object... argArray) {
+  public void warn(String format, Object[] argArray) {
     if (!logger.isWarnEnabled())
       return;
-    if (instanceofXLAL) {
-      String formattedMessage = MessageFormatter.format(format, argArray);
-      ((XLocationAwareLogger) logger).log(null, fqcn,
-          XLocationAwareLogger.WARN_INT, formattedMessage, argArray, null);
-    } else if (instanceofLAL) {
+
+    if (instanceofLAL) {
       String formattedMessage = MessageFormatter.arrayFormat(format, argArray);
       ((LocationAwareLogger) logger).log(null, fqcn,
           LocationAwareLogger.WARN_INT, formattedMessage, null);
@@ -729,11 +641,7 @@ public class LoggerWrapper implements Logger {
   public void warn(Marker marker, String format, Object arg) {
     if (!logger.isWarnEnabled())
       return;
-    if (instanceofXLAL) {
-      String formattedMessage = MessageFormatter.format(format, arg);
-      ((XLocationAwareLogger) logger).log(marker, fqcn,
-          XLocationAwareLogger.WARN_INT, formattedMessage, new Object[] {arg}, null);
-    } else if (instanceofLAL) {
+    if (instanceofLAL) {
       String formattedMessage = MessageFormatter.format(format, arg);
       ((LocationAwareLogger) logger).log(marker, fqcn,
           LocationAwareLogger.WARN_INT, formattedMessage, null);
@@ -748,11 +656,7 @@ public class LoggerWrapper implements Logger {
   public void warn(Marker marker, String format, Object arg1, Object arg2) {
     if (!logger.isWarnEnabled())
       return;
-    if (instanceofXLAL) {
-      String formattedMessage = MessageFormatter.format(format, arg1, arg2);
-      ((XLocationAwareLogger) logger).log(marker, fqcn,
-          XLocationAwareLogger.WARN_INT, formattedMessage, new Object[] {arg1, arg2}, null);
-    } else if (instanceofLAL) {
+    if (instanceofLAL) {
       String formattedMessage = MessageFormatter.format(format, arg1, arg2);
       ((LocationAwareLogger) logger).log(marker, fqcn,
           LocationAwareLogger.WARN_INT, formattedMessage, null);
@@ -764,14 +668,10 @@ public class LoggerWrapper implements Logger {
   /**
    * Delegate to the appropriate method of the underlying logger.
    */
-  public void warn(Marker marker, String format, Object... argArray) {
+  public void warn(Marker marker, String format, Object[] argArray) {
     if (!logger.isWarnEnabled())
       return;
-    if (instanceofXLAL) {
-      String formattedMessage = MessageFormatter.format(format, argArray);
-      ((XLocationAwareLogger) logger).log(marker, fqcn,
-          XLocationAwareLogger.WARN_INT, formattedMessage, argArray, null);
-    } else if (instanceofLAL) {
+    if (instanceofLAL) {
       String formattedMessage = MessageFormatter.arrayFormat(format, argArray);
       ((LocationAwareLogger) logger).log(marker, fqcn,
           LocationAwareLogger.WARN_INT, formattedMessage, null);
@@ -829,11 +729,8 @@ public class LoggerWrapper implements Logger {
   public void error(String format, Object arg) {
     if (!logger.isErrorEnabled())
       return;
-    if (instanceofXLAL) {
-      String formattedMessage = MessageFormatter.format(format, arg);
-      ((XLocationAwareLogger) logger).log(null, fqcn,
-          XLocationAwareLogger.ERROR_INT, formattedMessage, new Object[] {arg}, null);
-    } else if (instanceofLAL) {
+
+    if (instanceofLAL) {
       String formattedMessage = MessageFormatter.format(format, arg);
       ((LocationAwareLogger) logger).log(null, fqcn,
           LocationAwareLogger.ERROR_INT, formattedMessage, null);
@@ -848,11 +745,8 @@ public class LoggerWrapper implements Logger {
   public void error(String format, Object arg1, Object arg2) {
     if (!logger.isErrorEnabled())
       return;
-    if (instanceofXLAL) {
-      String formattedMessage = MessageFormatter.format(format, arg1, arg2);
-      ((XLocationAwareLogger) logger).log(null, fqcn,
-          XLocationAwareLogger.ERROR_INT, formattedMessage, new Object[] {arg1, arg2}, null);
-    } else if (instanceofLAL) {
+
+    if (instanceofLAL) {
       String formattedMessage = MessageFormatter.format(format, arg1, arg2);
       ((LocationAwareLogger) logger).log(null, fqcn,
           LocationAwareLogger.ERROR_INT, formattedMessage, null);
@@ -864,14 +758,11 @@ public class LoggerWrapper implements Logger {
   /**
    * Delegate to the appropriate method of the underlying logger.
    */
-  public void error(String format, Object... argArray) {
+  public void error(String format, Object[] argArray) {
     if (!logger.isErrorEnabled())
       return;
-    if (instanceofXLAL) {
-      String formattedMessage = MessageFormatter.format(format, argArray);
-      ((XLocationAwareLogger) logger).log(null, fqcn,
-          XLocationAwareLogger.ERROR_INT, formattedMessage, argArray, null);
-    } else if (instanceofLAL) {
+
+    if (instanceofLAL) {
       String formattedMessage = MessageFormatter.arrayFormat(format, argArray);
       ((LocationAwareLogger) logger).log(null, fqcn,
           LocationAwareLogger.ERROR_INT, formattedMessage, null);
@@ -915,11 +806,7 @@ public class LoggerWrapper implements Logger {
   public void error(Marker marker, String format, Object arg) {
     if (!logger.isErrorEnabled())
       return;
-    if (instanceofXLAL) {
-      String formattedMessage = MessageFormatter.format(format, arg);
-      ((XLocationAwareLogger) logger).log(marker, fqcn,
-          XLocationAwareLogger.ERROR_INT, formattedMessage, new Object[] {arg}, null);
-    } else if (instanceofLAL) {
+    if (instanceofLAL) {
       String formattedMessage = MessageFormatter.format(format, arg);
       ((LocationAwareLogger) logger).log(marker, fqcn,
           LocationAwareLogger.ERROR_INT, formattedMessage, null);
@@ -934,11 +821,7 @@ public class LoggerWrapper implements Logger {
   public void error(Marker marker, String format, Object arg1, Object arg2) {
     if (!logger.isErrorEnabled())
       return;
-    if (instanceofXLAL) {
-      String formattedMessage = MessageFormatter.format(format, arg1, arg2);
-      ((XLocationAwareLogger) logger).log(marker, fqcn,
-          XLocationAwareLogger.ERROR_INT, formattedMessage, new Object[] {arg1, arg2}, null);
-    } else if (instanceofLAL) {
+    if (instanceofLAL) {
       String formattedMessage = MessageFormatter.format(format, arg1, arg2);
       ((LocationAwareLogger) logger).log(marker, fqcn,
           LocationAwareLogger.ERROR_INT, formattedMessage, null);
@@ -950,14 +833,10 @@ public class LoggerWrapper implements Logger {
   /**
    * Delegate to the appropriate method of the underlying logger.
    */
-  public void error(Marker marker, String format, Object... argArray) {
+  public void error(Marker marker, String format, Object[] argArray) {
     if (!logger.isErrorEnabled())
       return;
-    if (instanceofXLAL) {
-      String formattedMessage = MessageFormatter.format(format, argArray);
-      ((XLocationAwareLogger) logger).log(marker, fqcn,
-          XLocationAwareLogger.ERROR_INT, formattedMessage, argArray, null);
-    } else if (instanceofLAL) {
+    if (instanceofLAL) {
       String formattedMessage = MessageFormatter.arrayFormat(format, argArray);
       ((LocationAwareLogger) logger).log(marker, fqcn,
           LocationAwareLogger.ERROR_INT, formattedMessage, null);

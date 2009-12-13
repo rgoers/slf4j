@@ -1,11 +1,15 @@
 package org.slf4j.ext;
 
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Marker;
 import org.slf4j.MarkerFactory;
-import org.slf4j.StructuredData;
+import org.slf4j.ext.LoggerWrapper;
+import org.slf4j.message.Message;
+import org.slf4j.message.MessageLogger;
+import org.slf4j.message.MessageLoggerFactory;
+import org.slf4j.message.MessageLoggerWrapper;
 import org.slf4j.spi.LocationAwareLogger;
-import org.slf4j.spi.XLocationAwareLogger;
 
 /**
  * Simple Logger used to log events. All events are directed to a logger named "EventLogger"
@@ -19,13 +23,13 @@ public class EventLogger {
 
   static Marker EVENT_MARKER = MarkerFactory.getMarker("EVENT");
 
-  private static LoggerWrapper eventLogger =
-      new LoggerWrapper(LoggerFactory.getLogger("EventLogger"), FQCN);
+  private static MessageLogger eventLogger = MessageLoggerFactory.getLogger("EventLogger", FQCN);
 
   /**
    * There can only be a single EventLogger.
    */
   private EventLogger() {
+
   }
 
   /**
@@ -45,14 +49,11 @@ public class EventLogger {
    * @deprecated Use logEvent(StructuredData data) instead.
    */
   public static void logEvent(EventData data, String format) {
-    if (eventLogger.instanceofXLAL) {
-      ((XLocationAwareLogger) eventLogger.logger).log(EVENT_MARKER, FQCN,
-          XLocationAwareLogger.INFO_INT, data.getEventData(), format, null);
-    } else if (eventLogger.instanceofLAL) {
-      ((LocationAwareLogger) eventLogger.logger).log(EVENT_MARKER, FQCN,
-          LocationAwareLogger.INFO_INT, data.toXML(), null);
+    if (format.equals("XML")) {
+      String msg = data.toXML();
+      eventLogger.log(EVENT_MARKER, FQCN, MessageLogger.INFO_INT, msg, null);
     } else {
-      eventLogger.logger.info(EVENT_MARKER, data.toXML(), data);
+      eventLogger.log(EVENT_MARKER, FQCN, MessageLogger.INFO_INT, data.getEventData(), null);
     }
   }
 
@@ -60,16 +61,7 @@ public class EventLogger {
    * Logs structured data
    * @param data The StructuredData
    */
-  public static void logEvent(StructuredData data) {
-    final String format = "full";
-     if (eventLogger.instanceofXLAL) {
-      ((XLocationAwareLogger) eventLogger.logger).log(EVENT_MARKER, FQCN,
-          XLocationAwareLogger.INFO_INT, data, format, null);
-    } else if (eventLogger.instanceofLAL) {
-      ((LocationAwareLogger) eventLogger.logger).log(EVENT_MARKER, FQCN,
-          LocationAwareLogger.INFO_INT, data.asString(format), null);
-    } else {
-      eventLogger.logger.info(EVENT_MARKER, data.asString(format), data);
-    }
+  public static void logEvent(Message data) {
+    eventLogger.log(EVENT_MARKER, FQCN, MessageLogger.INFO_INT, data, null);
   }
 }

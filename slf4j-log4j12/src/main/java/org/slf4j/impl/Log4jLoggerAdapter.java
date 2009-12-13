@@ -30,11 +30,11 @@ import java.io.Serializable;
 import org.apache.log4j.Level;
 import org.slf4j.Logger;
 import org.slf4j.Marker;
-import org.slf4j.StructuredData;
+import org.slf4j.message.Message;
+import org.slf4j.message.MessageLogger;
 import org.slf4j.helpers.MarkerIgnoringBase;
 import org.slf4j.helpers.MessageFormatter;
 import org.slf4j.spi.LocationAwareLogger;
-import org.slf4j.spi.XLocationAwareLogger;
 
 /**
  * A wrapper over {@link org.apache.log4j.Logger org.apache.log4j.Logger} in
@@ -53,7 +53,7 @@ import org.slf4j.spi.XLocationAwareLogger;
  * @author Ceki G&uuml;lc&uuml;
  */
 public final class Log4jLoggerAdapter extends MarkerIgnoringBase implements
-    XLocationAwareLogger, Serializable {
+    MessageLogger, Serializable {
 
   private static final long serialVersionUID = 6182834493563598289L;
 
@@ -97,6 +97,54 @@ public final class Log4jLoggerAdapter extends MarkerIgnoringBase implements
       return logger.isTraceEnabled();
     } else {
       return logger.isDebugEnabled();
+    }
+  }
+
+  /**
+   * Log a message with the specific Marker at the TRACE level.
+   *
+   * @param msg the message string to be logged
+   */
+  public void trace(Message msg) {
+    if (isTraceEnabled()) {
+      logger.log(FQCN, traceCapable ? Level.TRACE : Level.DEBUG, msg.getFormattedMessage(), null);
+    }
+  }
+
+  /**
+   * Log a message with the specific Marker at the TRACE level.
+   *
+   * @param msg the message string to be logged
+   * @param t A Throwable or null.
+   */
+  public void trace(Message msg, Throwable t) {
+    if (isTraceEnabled()) {
+      logger.log(FQCN, traceCapable ? Level.TRACE : Level.DEBUG, msg.getFormattedMessage(), t);
+    }
+  }
+
+  /**
+   * Log a message with the specific Marker at the TRACE level.
+   *
+   * @param marker the marker data specific to this log statement
+   * @param msg the message string to be logged
+   */
+  public void trace(Marker marker, Message msg) {
+    if (isTraceEnabled()) {
+      logger.log(FQCN, traceCapable ? Level.TRACE : Level.DEBUG, msg.getFormattedMessage(), null);
+    }
+  }
+
+  /**
+   * Log a message with the specific Marker at the TRACE level.
+   *
+   * @param marker the marker data specific to this log statement
+   * @param msg the message string to be logged
+   * @param t A Throwable or null.
+   */
+  public void trace(Marker marker, Message msg, Throwable t) {
+    if (isTraceEnabled()) {
+      logger.log(FQCN, traceCapable ? Level.TRACE : Level.DEBUG, msg.getFormattedMessage(), t);
     }
   }
 
@@ -197,6 +245,54 @@ public final class Log4jLoggerAdapter extends MarkerIgnoringBase implements
   }
 
   /**
+   * Log a message with the specific Marker at the DEBUG level.
+   *
+   * @param msg the message string to be logged
+   */
+  public void debug(Message msg) {
+    if (isDebugEnabled()) {
+      logger.log(FQCN, Level.DEBUG, msg.getFormattedMessage(), null);
+    }
+  }
+
+  /**
+   * Log a message with the specific Marker at the DEBUG level.
+   *
+   * @param msg the message string to be logged
+   * @param t A Throwable or null.
+   */
+  public void debug(Message msg, Throwable t) {
+    if (isDebugEnabled()) {
+      logger.log(FQCN, Level.DEBUG, msg.getFormattedMessage(), t);
+    }
+  }
+
+  /**
+   * Log a message with the specific Marker at the DEBUG level.
+   *
+   * @param marker the marker data specific to this log statement
+   * @param msg the message string to be logged
+   */
+  public void debug(Marker marker, Message msg) {
+    if (isDebugEnabled()) {
+      logger.log(FQCN, Level.DEBUG, msg.getFormattedMessage(), null);
+    }
+  }
+
+  /**
+   * Log a message with the specific Marker at the DEBUG level.
+   *
+   * @param marker the marker data specific to this log statement
+   * @param msg the message string to be logged
+   * @param t A Throwable or null.
+   */
+  public void debug(Marker marker, Message msg, Throwable t) {
+    if (isDebugEnabled()) {
+      logger.log(FQCN, Level.DEBUG, msg.getFormattedMessage(), t);
+    }
+  }
+
+  /**
    * Log a message object at level DEBUG.
    *
    * @param msg -
@@ -290,6 +386,54 @@ public final class Log4jLoggerAdapter extends MarkerIgnoringBase implements
    */
   public boolean isInfoEnabled() {
     return logger.isInfoEnabled();
+  }
+
+  /**
+   * Log a message with the specific Marker at the INFO level.
+   *
+   * @param msg the message string to be logged
+   */
+  public void info(Message msg) {
+    if (isInfoEnabled()) {
+      logger.log(FQCN, Level.INFO, msg.getFormattedMessage(), null);
+    }
+  }
+
+  /**
+   * Log a message with the specific Marker at the INFO level.
+   *
+   * @param msg the message string to be logged
+   * @param t A Throwable or null.
+   */
+  public void info(Message msg, Throwable t) {
+    if (isInfoEnabled()) {
+      logger.log(FQCN, Level.INFO, msg.getFormattedMessage(), t);
+    }
+  }
+
+  /**
+   * Log a message with the specific Marker at the INFO level.
+   *
+   * @param marker the marker data specific to this log statement
+   * @param msg the message string to be logged
+   */
+  public void info(Marker marker, Message msg) {
+    if (isInfoEnabled()) {
+      logger.log(FQCN, Level.INFO, msg.getFormattedMessage(), null);
+    }
+  }
+
+  /**
+   * Log a message with the specific Marker at the INFO level.
+   *
+   * @param marker the marker data specific to this log statement
+   * @param msg the message string to be logged
+   * @param t A Throwable or null.
+   */
+  public void info(Marker marker, Message msg, Throwable t) {
+    if (isInfoEnabled()) {
+      logger.log(FQCN, Level.INFO, msg.getFormattedMessage(), t);
+    }
   }
 
   /**
@@ -389,6 +533,54 @@ public final class Log4jLoggerAdapter extends MarkerIgnoringBase implements
   }
 
   /**
+   * Log a message with the specific Marker at the WARN level.
+   *
+   * @param msg the message string to be logged
+   */
+  public void warn(Message msg) {
+    if (isWarnEnabled()) {
+      logger.log(FQCN, Level.WARN, msg.getFormattedMessage(), null);
+    }
+  }
+
+  /**
+   * Log a message with the specific Marker at the WARN level.
+   *
+   * @param msg the message string to be logged
+   * @param t A Throwable or null.
+   */
+  public void warn(Message msg, Throwable t) {
+    if (isWarnEnabled()) {
+      logger.log(FQCN, Level.WARN, msg.getFormattedMessage(), t);
+    }
+  }
+
+  /**
+   * Log a message with the specific Marker at the WARN level.
+   *
+   * @param marker the marker data specific to this log statement
+   * @param msg the message string to be logged
+   */
+  public void warn(Marker marker, Message msg) {
+    if (isWarnEnabled()) {
+      logger.log(FQCN, Level.WARN, msg.getFormattedMessage(), null);
+    }
+  }
+
+  /**
+   * Log a message with the specific Marker at the WARN level.
+   *
+   * @param marker the marker data specific to this log statement
+   * @param msg the message string to be logged
+   * @param t A Throwable or null.
+   */
+  public void warn(Marker marker, Message msg, Throwable t) {
+    if (isWarnEnabled()) {
+      logger.log(FQCN, Level.WARN, msg.getFormattedMessage(), t);
+    }
+  }
+
+  /**
    * Log a message object at the WARN level.
    *
    * @param msg -
@@ -483,6 +675,54 @@ public final class Log4jLoggerAdapter extends MarkerIgnoringBase implements
    */
   public boolean isErrorEnabled() {
     return logger.isEnabledFor(Level.ERROR);
+  }
+
+  /**
+   * Log a message with the specific Marker at the ERROR level.
+   *
+   * @param msg the message string to be logged
+   */
+  public void error(Message msg) {
+    if (isErrorEnabled()) {
+      logger.log(FQCN, Level.ERROR, msg.getFormattedMessage(), null);
+    }
+  }
+
+  /**
+   * Log a message with the specific Marker at the ERROR level.
+   *
+   * @param msg the message string to be logged
+   * @param t A Throwable or null.
+   */
+  public void error(Message msg, Throwable t) {
+    if (isErrorEnabled()) {
+      logger.log(FQCN, Level.ERROR, msg.getFormattedMessage(), t);
+    }
+  }
+
+  /**
+   * Log a message with the specific Marker at the ERROR level.
+   *
+   * @param marker the marker data specific to this log statement
+   * @param msg the message string to be logged
+   */
+  public void error(Marker marker, Message msg) {
+    if (isErrorEnabled()) {
+      logger.log(FQCN, Level.ERROR, msg.getFormattedMessage(), null);
+    }
+  }
+
+  /**
+   * Log a message with the specific Marker at the ERRNR level.
+   *
+   * @param marker the marker data specific to this log statement
+   * @param msg the message string to be logged
+   * @param t A Throwable or null.
+   */
+  public void error(Marker marker, Message msg, Throwable t) {
+    if (isErrorEnabled()) {
+      logger.log(FQCN, Level.DEBUG, msg.getFormattedMessage(), t);
+    }
   }
 
   /**
@@ -587,7 +827,7 @@ public final class Log4jLoggerAdapter extends MarkerIgnoringBase implements
    * @param argArray
    * @param t
    */
-  public void log(Marker marker, String callerFQCN, int level, String format, Object[] argArray, Throwable t) {
+  public void log(Marker marker, String callerFQCN, int level, String format, Throwable t, Object[] argArray) {
     String msgStr = MessageFormatter.arrayFormat(format, argArray);
     logger.log(callerFQCN, getLog4jLevel(level), msgStr, t);
   }
@@ -600,8 +840,8 @@ public final class Log4jLoggerAdapter extends MarkerIgnoringBase implements
    * @param data
    * @param t
    */
-  public void log(Marker marker, String callerFQCN, int level, StructuredData data, String format, Throwable t) {
-    logger.log(callerFQCN, getLog4jLevel(level), data.asString(format), t);
+  public void log(Marker marker, String callerFQCN, int level, Message data, Throwable t) {
+    logger.log(callerFQCN, getLog4jLevel(level), data.getFormattedMessage(), t);
   }
 
   private Level getLog4jLevel(int level) {

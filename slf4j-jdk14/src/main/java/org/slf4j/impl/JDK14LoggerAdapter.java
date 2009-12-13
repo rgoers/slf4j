@@ -38,11 +38,11 @@ import java.util.logging.LogRecord;
 
 import org.slf4j.Logger;
 import org.slf4j.Marker;
-import org.slf4j.StructuredData;
+import org.slf4j.message.Message;
+import org.slf4j.message.MessageLogger;
 import org.slf4j.helpers.MarkerIgnoringBase;
 import org.slf4j.helpers.MessageFormatter;
 import org.slf4j.spi.LocationAwareLogger;
-import org.slf4j.spi.XLocationAwareLogger;
 
 /**
  * A wrapper over {@link java.util.logging.Logger java.util.logging.Logger} in
@@ -54,7 +54,7 @@ import org.slf4j.spi.XLocationAwareLogger;
  * @author Peter Royal
  */
 public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements
-    XLocationAwareLogger {
+    MessageLogger {
 
   private static final long serialVersionUID = -8053026990503422791L;
 
@@ -74,6 +74,54 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements
    */
   public boolean isTraceEnabled() {
     return logger.isLoggable(Level.FINEST);
+  }
+
+  /**
+   * Log a message with the specific Marker at the TRACE level.
+   *
+   * @param msg the message string to be logged
+   */
+  public void trace(Message msg) {
+    if (logger.isLoggable(Level.FINEST)) {
+      log(SELF, Level.FINEST, msg.getFormattedMessage(), null);
+    }
+  }
+
+  /**
+   * Log a message with the specific Marker at the TRACE level.
+   *
+   * @param msg the message string to be logged
+   * @param t A Throwable or null.
+   */
+  public void trace(Message msg, Throwable t) {
+    if (logger.isLoggable(Level.FINEST)) {
+      log(SELF, Level.FINEST, msg.getFormattedMessage(), t);
+    }
+  }
+
+  /**
+   * Log a message with the specific Marker at the TRACE level.
+   *
+   * @param marker the marker data specific to this log statement
+   * @param msg the message string to be logged
+   */
+  public void trace(Marker marker, Message msg) {
+    if (logger.isLoggable(Level.FINEST)) {
+      log(SELF, Level.FINEST, msg.getFormattedMessage(), null);
+    }
+  }
+
+  /**
+   * Log a message with the specific Marker at the TRACE level.
+   *
+   * @param marker the marker data specific to this log statement
+   * @param msg the message string to be logged
+   * @param t A Throwable or null.
+   */
+  public void trace(Marker marker, Message msg, Throwable t) {
+     if (logger.isLoggable(Level.FINEST)) {
+      log(SELF, Level.FINEST, msg.getFormattedMessage(), t);
+    }
   }
 
   /**
@@ -177,6 +225,53 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements
   }
 
   /**
+   * Log a message with the specific Marker at the DEBUG level.
+   *
+   * @param msg the message string to be logged
+   */
+  public void debug(Message msg) {
+    if (logger.isLoggable(Level.FINE)) {
+      log(SELF, Level.FINE, msg.getFormattedMessage(), null);
+    }
+  }
+
+  /**
+   * Log a message with the specific Marker at the DEBUG level.
+   *
+   * @param msg the message string to be logged
+   * @param t A Throwable or null.
+   */
+  public void debug(Message msg, Throwable t) {
+    if (logger.isLoggable(Level.FINE)) {
+      log(SELF, Level.FINE, msg.getFormattedMessage(), t);
+    }
+  }
+
+  /**
+   * Log a message with the specific Marker at the DEBUG level.
+   *
+   * @param marker the marker data specific to this log statement
+   * @param msg the message string to be logged
+   */
+  public void debug(Marker marker, Message msg) {
+    if (logger.isLoggable(Level.FINE)) {
+      log(SELF, Level.FINE, msg.getFormattedMessage(), null);
+    }
+  }
+
+  /**
+   * Log a message with the specific Marker at the DEBUG level.
+   *
+   * @param marker the marker data specific to this log statement
+   * @param msg the message string to be logged
+   * @param t A Throwable or null.
+   */
+  public void debug(Marker marker, Message msg, Throwable t) {
+     if (logger.isLoggable(Level.FINE)) {
+      log(SELF, Level.FINE, msg.getFormattedMessage(), t);
+    }
+  }
+  /**
    * Log a message object at level FINE.
    *
    * @param msg -
@@ -275,6 +370,53 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements
     return logger.isLoggable(Level.INFO);
   }
 
+  /**
+   * Log a message with the specific Marker at the INFO level.
+   *
+   * @param msg the message string to be logged
+   */
+  public void info(Message msg) {
+    if (logger.isLoggable(Level.INFO)) {
+      log(SELF, Level.INFO, msg.getFormattedMessage(), null);
+    }
+  }
+
+  /**
+   * Log a message with the specific Marker at the INFO level.
+   *
+   * @param msg the message string to be logged
+   * @param t A Throwable or null.
+   */
+  public void info(Message msg, Throwable t) {
+    if (logger.isLoggable(Level.INFO)) {
+      log(SELF, Level.INFO, msg.getFormattedMessage(), t);
+    }
+  }
+
+  /**
+   * Log a message with the specific Marker at the INFO level.
+   *
+   * @param marker the marker data specific to this log statement
+   * @param msg the message string to be logged
+   */
+  public void info(Marker marker, Message msg) {
+    if (logger.isLoggable(Level.FINEST)) {
+      log(SELF, Level.FINEST, msg.getFormattedMessage(), null);
+    }
+  }
+
+  /**
+   * Log a message with the specific Marker at the INFO level.
+   *
+   * @param marker the marker data specific to this log statement
+   * @param msg the message string to be logged
+   * @param t A Throwable or null.
+   */
+  public void info(Marker marker, Message msg, Throwable t) {
+     if (logger.isLoggable(Level.INFO)) {
+      log(SELF, Level.INFO, msg.getFormattedMessage(), t);
+    }
+  }
   /**
    * Log a message object at the INFO level.
    *
@@ -377,6 +519,53 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements
   }
 
   /**
+   * Log a message with the specific Marker at the WARN level.
+   *
+   * @param msg the message string to be logged
+   */
+  public void warn(Message msg) {
+    if (logger.isLoggable(Level.WARNING)) {
+      log(SELF, Level.WARNING, msg.getFormattedMessage(), null);
+    }
+  }
+
+  /**
+   * Log a message with the specific Marker at the WARN level.
+   *
+   * @param msg the message string to be logged
+   * @param t A Throwable or null.
+   */
+  public void warn(Message msg, Throwable t) {
+    if (logger.isLoggable(Level.WARNING)) {
+      log(SELF, Level.WARNING, msg.getFormattedMessage(), t);
+    }
+  }
+
+  /**
+   * Log a message with the specific Marker at the WARN level.
+   *
+   * @param marker the marker data specific to this log statement
+   * @param msg the message string to be logged
+   */
+  public void warn(Marker marker, Message msg) {
+    if (logger.isLoggable(Level.WARNING)) {
+      log(SELF, Level.WARNING, msg.getFormattedMessage(), null);
+    }
+  }
+
+  /**
+   * Log a message with the specific Marker at the WARN level.
+   *
+   * @param marker the marker data specific to this log statement
+   * @param msg the message string to be logged
+   * @param t A Throwable or null.
+   */
+  public void warn(Marker marker, Message msg, Throwable t) {
+     if (logger.isLoggable(Level.WARNING)) {
+      log(SELF, Level.WARNING, msg.getFormattedMessage(), t);
+    }
+  }
+  /**
    * Log a message object at the WARNING level.
    *
    * @param msg -
@@ -477,6 +666,53 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements
     return logger.isLoggable(Level.SEVERE);
   }
 
+  /**
+   * Log a message with the specific Marker at the ERROR level.
+   *
+   * @param msg the message string to be logged
+   */
+  public void error(Message msg) {
+    if (logger.isLoggable(Level.SEVERE)) {
+      log(SELF, Level.SEVERE, msg.getFormattedMessage(), null);
+    }
+  }
+
+  /**
+   * Log a message with the specific Marker at the ERROR level.
+   *
+   * @param msg the message string to be logged
+   * @param t A Throwable or null.
+   */
+  public void error(Message msg, Throwable t) {
+    if (logger.isLoggable(Level.SEVERE)) {
+      log(SELF, Level.SEVERE, msg.getFormattedMessage(), t);
+    }
+  }
+
+  /**
+   * Log a message with the specific Marker at the ERROR level.
+   *
+   * @param marker the marker data specific to this log statement
+   * @param msg the message string to be logged
+   */
+  public void error(Marker marker, Message msg) {
+    if (logger.isLoggable(Level.SEVERE)) {
+      log(SELF, Level.SEVERE, msg.getFormattedMessage(), null);
+    }
+  }
+
+  /**
+   * Log a message with the specific Marker at the ERROR level.
+   *
+   * @param marker the marker data specific to this log statement
+   * @param msg the message string to be logged
+   * @param t A Throwable or null.
+   */
+  public void error(Marker marker, Message msg, Throwable t) {
+     if (logger.isLoggable(Level.SEVERE)) {
+      log(SELF, Level.SEVERE, msg.getFormattedMessage(), t);      
+    }
+  }
   /**
    * Log a message object at the SEVERE level.
    *
@@ -643,7 +879,7 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements
   }
 
 
-  public void log(Marker marker, String callerFQCN, int level, String format, Object[] argArray, Throwable t) {
+  public void log(Marker marker, String callerFQCN, int level, String format, Throwable t, Object[] argArray) {
      Level julLevel = getLevel(level);
     // the logger.isLoggable check avoids the unconditional
     // construction of location data for disabled log
@@ -656,7 +892,7 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements
     }
   }
 
-  public void log(Marker marker, String callerFQCN, int level, StructuredData data, String format, Throwable t) {
+  public void log(Marker marker, String callerFQCN, int level, Message data, Throwable t) {
     Level julLevel = getLevel(level);
     // the logger.isLoggable check avoids the unconditional
     // construction of location data for disabled log
@@ -664,7 +900,7 @@ public final class JDK14LoggerAdapter extends MarkerIgnoringBase implements
     // do not perform this check. See also
     // http://bugzilla.slf4j.org/show_bug.cgi?id=90
     if(logger.isLoggable(julLevel)) {
-      log(callerFQCN, julLevel, data.asString(format), t);
+      log(callerFQCN, julLevel, data.getFormattedMessage(), t);
     }
   }
 

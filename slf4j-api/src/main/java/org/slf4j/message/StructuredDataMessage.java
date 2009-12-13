@@ -1,14 +1,16 @@
-package org.slf4j;
+package org.slf4j.message;
 
+import java.util.Arrays;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Collections;
+import java.io.Serializable;
 
 /**
  *
  */
-public class StructuredDataImpl implements StructuredData {
+public class StructuredDataMessage implements Message, Serializable {
   private static final long serialVersionUID = 1703221292892071920L;
 
   public static final String FULL = "full";
@@ -21,19 +23,19 @@ public class StructuredDataImpl implements StructuredData {
 
   private String type;
 
-  public StructuredDataImpl(final String id, final String msg, final String type) {
+  public StructuredDataMessage(final String id, final String msg, final String type) {
     this.id = new StructuredDataId(id, null, null);
     this.message = msg;
     this.type = type;
   }
 
-  public StructuredDataImpl(final StructuredDataId id, final String msg, final String type) {
+  public StructuredDataMessage(final StructuredDataId id, final String msg, final String type) {
     this.id = id;
     this.message = msg;
     this.type = type;
   }
 
-  protected StructuredDataImpl() {
+  protected StructuredDataMessage() {
 
   }
 
@@ -60,11 +62,15 @@ public class StructuredDataImpl implements StructuredData {
     this.type = type;
   }
 
-  public String getMessage() {
+  public Object[] getParameters() {
+    return data.values().toArray();
+  }
+
+  public String getMessageFormat() {
     return message;
   }
 
-  protected void setMessage(String msg) {
+  protected void setMessageFormat(String msg) {
     this.message = msg;
   }
 
@@ -147,7 +153,7 @@ public class StructuredDataImpl implements StructuredData {
     appendMap(getData(), sb);
     sb.append("]");
     if (full) {
-      String msg = getMessage();
+      String msg = getMessageFormat();
       if (msg != null) {
         sb.append(" ").append(msg);
       }
@@ -155,6 +161,10 @@ public class StructuredDataImpl implements StructuredData {
     return sb.toString();
   }
 
+  public String getFormattedMessage() {
+    return asString(FULL, null);
+  }
+                          
   private void appendMap(Map map, StringBuffer sb) {
     Iterator iter = map.entrySet().iterator();
     while (iter.hasNext()) {
@@ -176,7 +186,7 @@ public class StructuredDataImpl implements StructuredData {
       return false;
     }
 
-    StructuredDataImpl that = (StructuredDataImpl) o;
+    StructuredDataMessage that = (StructuredDataMessage) o;
 
     if (data != null ? !data.equals(that.data) : that.data != null) {
       return false;

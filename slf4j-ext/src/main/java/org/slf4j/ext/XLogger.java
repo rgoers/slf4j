@@ -4,12 +4,13 @@ import org.slf4j.Logger;
 import org.slf4j.Marker;
 import org.slf4j.MarkerFactory;
 import org.slf4j.helpers.MessageFormatter;
+import org.slf4j.ext.LoggerWrapper;
 import org.slf4j.spi.LocationAwareLogger;
 
 /**
  * A utility that provides standard mechanisms for logging certain kinds of
  * activities.
- * 
+ *
  * @author Ralph Goers
  * @author Ceki G&uuml;lc&uuml;
  */
@@ -73,7 +74,7 @@ public class XLogger extends LoggerWrapper implements Logger {
 
   /**
    * Given an underlying logger, construct an XLogger
-   * 
+   *
    * @param logger
    *                underlying logger
    */
@@ -86,7 +87,7 @@ public class XLogger extends LoggerWrapper implements Logger {
 
   /**
    * Log method entry.
-   * 
+   *
    * @param argArray
    *                supplied parameters
    */
@@ -117,7 +118,7 @@ public class XLogger extends LoggerWrapper implements Logger {
 
   /**
    * Log method exit
-   * 
+   *
    * @param result
    *                The result of the method being exited
    */
@@ -131,7 +132,7 @@ public class XLogger extends LoggerWrapper implements Logger {
 
   /**
    * Log an exception being thrown. The generated log event uses Level ERROR.
-   * 
+   *
    * @param throwable
    *                the exception being caught.
    */
@@ -158,7 +159,7 @@ public class XLogger extends LoggerWrapper implements Logger {
 
   /**
    * Log an exception being caught. The generated log event uses Level ERROR.
-   * 
+   *
    * @param throwable
    *                the exception being caught.
    */

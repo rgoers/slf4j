@@ -1,4 +1,4 @@
-package org.slf4j;
+package org.slf4j.message;
 
 import java.io.Serializable;
 

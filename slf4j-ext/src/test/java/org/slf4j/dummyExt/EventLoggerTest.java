@@ -33,8 +33,7 @@ import junit.framework.TestCase;
 import org.apache.log4j.spi.LocationInfo;
 import org.apache.log4j.spi.LoggingEvent;
 import org.slf4j.MDC;
-import org.slf4j.StructuredData;
-import org.slf4j.StructuredDataImpl;
+import org.slf4j.message.StructuredDataMessage;
 import org.slf4j.ext.EventData;
 import org.slf4j.ext.EventLogger;
 
@@ -109,12 +108,12 @@ public class EventLoggerTest extends TestCase {
   }
 
   public void testEventLogger2() {
-    StructuredData data[] = new StructuredData[2];
-    data[0] = new StructuredDataImpl("1", null, "Login");
+    StructuredDataMessage data[] = new StructuredDataMessage[2];
+    data[0] = new StructuredDataMessage("1", null, "Login");
     data[0].put("Userid", "TestUser");
     EventLogger.logEvent(data[0]);
 
-    data[1] = new StructuredDataImpl("2", null, "Update");
+    data[1] = new StructuredDataMessage("2", null, "Update");
     data[1].put("FileName", "/etc/hosts");
     EventLogger.logEvent(data[1]);
 

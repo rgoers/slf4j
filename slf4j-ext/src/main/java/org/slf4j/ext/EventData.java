@@ -22,8 +22,7 @@
 
 package org.slf4j.ext;
 
-import org.slf4j.StructuredDataImpl;
-import org.slf4j.StructuredData;
+import org.slf4j.message.StructuredDataMessage;
 
 import java.io.Serializable;
 import java.io.ByteArrayInputStream;
@@ -107,7 +106,7 @@ public class EventData implements Serializable {
   public String toXML() {
     Map<String, Object> map = new HashMap<String, Object>();
     map.putAll(eventData.getData());
-    map.put(EVENT_MESSAGE, eventData.getMessage());
+    map.put(EVENT_MESSAGE, eventData.getMessageFormat());
     map.put(EVENT_TYPE, eventData.getType());
     map.put(EVENT_ID, eventData.getId().toString());
     return toXML(map);
@@ -165,7 +164,7 @@ public class EventData implements Serializable {
    *         none.
    */
   public String getMessage() {
-    return eventData.getMessage();
+    return eventData.getMessageFormat();
   }
 
   /**
@@ -175,7 +174,7 @@ public class EventData implements Serializable {
    *          The message text.
    */
   public void setMessage(String message) {
-    eventData.setMessage(message);
+    eventData.setMessageFormat(message);
   }
 
   /**
@@ -293,7 +292,7 @@ public class EventData implements Serializable {
     Map<String, Object> map = new HashMap<String, Object>(eventData.getData());
     map.put(EVENT_ID, eventData.getId());
     map.put(EVENT_TYPE, eventData.getType());
-    map.put(EVENT_MESSAGE, eventData.getMessage());
+    map.put(EVENT_MESSAGE, eventData.getMessageFormat());
     return map;
   }
 
@@ -301,7 +300,7 @@ public class EventData implements Serializable {
    * Return the underlying StructuredData object.
    * @return The StructuredData Object.
    */
-  public StructuredData getEventData() {
+  public StructuredDataMessage getEventData() {
     return eventData;
   }
 
@@ -348,7 +347,7 @@ public class EventData implements Serializable {
     return this.eventData.hashCode();
   }
 
-  private class StructuredEventData extends StructuredDataImpl {
+  private class StructuredEventData extends StructuredDataMessage {
     private static final long serialVersionUID = 1093221292892071920L;
 
     public StructuredEventData() {
@@ -362,8 +361,8 @@ public class EventData implements Serializable {
       super.setId(id);
     }
 
-    public void setMessage(String msg) {
-      super.setMessage(msg);
+    public void setMessageFormat(String msg) {
+      super.setMessageFormat(msg);
     }
 
     public void setType(String type) {
