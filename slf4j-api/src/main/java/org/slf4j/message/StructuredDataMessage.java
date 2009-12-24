@@ -1,6 +1,5 @@
 package org.slf4j.message;
 
-import java.util.Arrays;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -145,7 +144,7 @@ public class StructuredDataMessage implements Message, Serializable {
     } else {
       id = structuredDataId;
     }
-    if (id == null || id.getName() == null || getData().size() == 0) {
+    if (id == null || id.getName() == null) {
       return sb.toString();
     }
     sb.append("[");
@@ -164,7 +163,7 @@ public class StructuredDataMessage implements Message, Serializable {
   public String getFormattedMessage() {
     return asString(FULL, null);
   }
-                          
+
   private void appendMap(Map map, StringBuffer sb) {
     Iterator iter = map.entrySet().iterator();
     while (iter.hasNext()) {
